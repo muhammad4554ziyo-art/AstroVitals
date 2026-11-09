@@ -43,12 +43,21 @@ fi
 echo "[+] Running C++ DSP & SEU Hardening Benchmark..."
 "${SCRIPT_DIR}/build/dsp_benchmark"
 
-# 5. Run Automated Unit & Integration Test Suite
-echo "[+] Running Full 10-Constraint Verification Test Suite..."
-python3 -m unittest tests/test_suite.py
+# 5. Run Automated Unit & Integration Test Suite (All 17 Tests)
+echo "[+] Running Full Spaceflight & Bio-Digital Twin Test Suite (17 Tests)..."
+python3 -m unittest discover tests
 
-# 6. Run Spaceflight Mission Demonstration
+# 6. Run Spaceflight Mission Demonstration & Digital Twin Matrix
 echo "[+] Launching Live Spaceflight Telemetry & Emergency Simulation..."
 python3 demo_edge_daemon.py
 
-echo "[+] System launch and validation completed successfully."
+echo "[+] Running Bio-Digital Twin 5x5 Mission Simulation Matrix..."
+python3 demo_digital_twin.py --matrix
+
+echo ""
+echo "=================================================================="
+echo "  NASA MISSION CONTROL CONSOLE IS READY TO RUN"
+echo "  To start the Web UI Console, execute:"
+echo "    python3 web_server.py"
+echo "  Open browser at: http://127.0.0.1:8080"
+echo "=================================================================="
