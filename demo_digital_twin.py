@@ -17,7 +17,7 @@ from health_monitor.hud_interface import Color
 
 def print_banner():
     print(f"\n{Color.BG_BLACK}{Color.CYAN_INFO}{'='*80}{Color.RESET}")
-    print(f"{Color.BG_BLACK}{Color.WHITE_BOLD}   ASTROLOGIC X - ASTRONAVT BIOLOGIK RAQAMLI EGIZAKLARI SIMULYATORI{Color.RESET}")
+    print(f"{Color.BG_BLACK}{Color.WHITE_BOLD}   ASTROVITALS - ASTRONAVT BIOLOGIK RAQAMLI EGIZAKLARI SIMULYATORI{Color.RESET}")
     print(f"{Color.BG_BLACK}{Color.WHITE_BOLD}   (ASTRONAUT BIO-DIGITAL TWIN & PRE-MISSION AI PREDICTIVE ENGINE){Color.RESET}")
     print(f"{Color.BG_BLACK}{Color.CYAN_INFO}{'='*80}{Color.RESET}\n")
 

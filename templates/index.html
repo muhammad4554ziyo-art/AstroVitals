@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroLogic X | NASA Mission Control & Bio-Digital Twin Platform</title>
+    <title>AstroVitals | Deep-Space Crew Bio-Digital Twin &amp; Mission Control</title>
+    <link rel="icon" type="image/png" href="/static/img/favicon.png">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/astrovitals_icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-deep: #05080f;
             --bg-void: #090e17;
             --bg-surface: #0e1524;
             --bg-card: #131d31;
-            --bg-card-hover: #1a2742;
+            --bg-card-hover: #192640;
             --border-subtle: #1c2b45;
             --border-glow: #28416d;
             
@@ -51,11 +54,11 @@
             font-size: 13px;
             user-select: none;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(11, 61, 145, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(0, 240, 255, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 15% 15%, rgba(11, 61, 145, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(0, 240, 255, 0.06) 0%, transparent 45%);
         }
 
-        /* 1. TOP MISSION BAR */
+        /* 1. TOP MISSION CONDUCTOR BAR */
         .flight-bar {
             height: 52px;
             background: linear-gradient(180deg, #101827 0%, #090e17 100%);
@@ -63,58 +66,82 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 18px;
+            padding: 0 20px;
             flex-shrink: 0;
             z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            box-shadow: 0 2px 14px rgba(0,0,0,0.65);
         }
 
         .brand-container {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
         }
         
-        .nasa-insignia {
-            background: linear-gradient(135deg, #0b3d91 0%, #fc3d21 100%);
-            color: #ffffff;
-            font-family: var(--font-mono);
-            font-weight: 900;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            padding: 5px 9px;
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 0 10px rgba(11, 61, 145, 0.6);
+        .brand-logo-frame {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: radial-gradient(circle at center, rgba(0, 240, 255, 0.22) 0%, #05080f 80%);
+            border: 1px solid rgba(0, 240, 255, 0.45);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(255, 23, 68, 0.25);
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .nasa-insignia::before {
-            content: "●";
-            color: #ffffff;
-            font-size: 8px;
-            animation: pulse-dot 1.5s infinite;
+        .brand-logo-frame:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 24px rgba(0, 240, 255, 0.6), inset 0 0 14px rgba(255, 23, 68, 0.5);
+            transform: scale(1.05);
         }
-        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .brand-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
 
         .brand-titles {
             display: flex;
             flex-direction: column;
+            gap: 2px;
         }
         .brand-main {
             font-family: var(--font-mono);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .brand-main span { color: var(--cyan); text-shadow: 0 0 8px var(--cyan-glow); }
-        .brand-sub {
+        .brand-vitals {
+            background: linear-gradient(135deg, #ff1744 0%, #00f0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.4));
+        }
+        .brand-tag {
             font-size: 10px;
+            font-weight: 600;
             color: var(--text-muted);
-            letter-spacing: 0.6px;
+            letter-spacing: 1px;
+        }
+        .brand-sub {
+            font-size: 9.5px;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
             font-weight: 500;
+            text-transform: uppercase;
         }
 
         /* Top Navigation Tabs */
@@ -152,7 +179,7 @@
             border: 1px solid rgba(0, 240, 255, 0.4);
         }
 
-        /* Top Bar Telemetry Status & Clocks */
+        /* Flight Clocks & Status */
         .flight-clock-bar {
             display: flex;
             align-items: center;
@@ -217,6 +244,33 @@
         }
         .view-panel.active {
             display: flex;
+        }
+
+        /* SECTION HEADER BANNER */
+        .section-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--cyan);
+            padding: 10px 18px;
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.08) 0%, transparent 100%);
+            border-radius: 0 8px 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .section-banner-title {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-banner-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            margin-top: 3px;
         }
 
         /* DIGITAL TWIN 3-STEP FLOW HEADER */
@@ -288,33 +342,7 @@
             font-weight: 900;
         }
 
-        /* SECTION HEADER BANNER */
-        .section-banner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid var(--cyan);
-            padding: 8px 16px;
-            background: linear-gradient(90deg, rgba(0, 240, 255, 0.08) 0%, transparent 100%);
-            border-radius: 0 8px 8px 0;
-        }
-        .section-banner-title {
-            font-size: 15px;
-            font-weight: 800;
-            letter-spacing: 0.6px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .section-banner-subtitle {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-            margin-top: 2px;
-        }
-
-        /* ASTRONAUT SELECTION CARDS GRID */
+        /* CREW GRID (SELECTION IN TWIN) */
         .crew-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -354,16 +382,15 @@
             background: var(--cyan);
             box-shadow: 0 0 10px var(--cyan);
         }
-
         .astro-card-top {
             display: flex;
             align-items: center;
             gap: 14px;
         }
         .astro-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
             background: #090e17;
             border: 2px solid var(--border-glow);
             display: flex;
@@ -373,15 +400,20 @@
             font-weight: 800;
             font-size: 16px;
             color: var(--cyan);
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: 0 0 12px rgba(0,0,0,0.6);
             flex-shrink: 0;
             position: relative;
+            overflow: hidden;
+        }
+        .astro-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .astro-card.selected .astro-avatar {
             border-color: var(--cyan);
-            box-shadow: 0 0 14px var(--cyan-glow);
-            color: #fff;
-            background: var(--nasa-blue);
+            box-shadow: 0 0 16px var(--cyan-glow);
         }
         .astro-info {
             display: flex;
@@ -410,7 +442,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Biometric Stat Bars inside Cards */
         .astro-stats-table {
             display: flex;
             flex-direction: column;
@@ -457,7 +488,7 @@
             font-family: var(--font-mono);
         }
 
-        /* OPERATION SELECTION CARDS GRID */
+        /* OPS GRID (SELECTION IN TWIN) */
         .ops-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -495,7 +526,6 @@
             box-shadow: 0 0 25px var(--red-glow);
             background: #240a12;
         }
-
         .op-header {
             display: flex;
             justify-content: space-between;
@@ -524,7 +554,6 @@
             0%, 100% { box-shadow: 0 0 6px var(--red-glow); }
             50% { box-shadow: 0 0 16px var(--red-glow); }
         }
-
         .op-title {
             font-size: 15px;
             font-weight: 800;
@@ -542,7 +571,6 @@
             color: var(--text-secondary);
             line-height: 1.45;
         }
-
         .op-physics-matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -559,13 +587,12 @@
         .phys-lbl { font-size: 9px; color: var(--text-muted); }
         .phys-val { font-size: 12px; font-weight: 700; color: #fff; }
 
-        /* SIMULATION CANVAS & COCKPIT PANEL */
+        /* SIMULATION COCKPIT */
         .sim-cockpit-layout {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-
         .pre-flight-summary-bar {
             background: var(--bg-surface);
             border: 1px solid var(--border-glow);
@@ -614,7 +641,7 @@
             transform: none;
         }
 
-        /* CANVAS CONTAINER */
+        /* 60FPS CANVAS PANEL */
         .canvas-viewport-panel {
             background: #000000;
             border: 1px solid var(--border-glow);
@@ -629,8 +656,6 @@
             height: 100%;
             display: block;
         }
-
-        /* HUD Overlays on Canvas */
         .canvas-hud-overlay {
             position: absolute;
             top: 14px;
@@ -640,7 +665,7 @@
             flex-direction: column;
             gap: 6px;
             font-family: var(--font-mono);
-            background: rgba(5, 8, 15, 0.65);
+            background: rgba(5, 8, 15, 0.7);
             padding: 8px 14px;
             border-radius: 6px;
             border: 1px solid rgba(0, 240, 255, 0.3);
@@ -653,7 +678,6 @@
             gap: 8px;
         }
         .hud-line span { color: var(--cyan); font-weight: 700; }
-
         .canvas-hazard-banner {
             position: absolute;
             top: 14px;
@@ -670,7 +694,7 @@
             gap: 8px;
         }
 
-        /* LIVE TELEMETRY GAUGES GRID */
+        /* GAUGES GRID */
         .gauges-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -720,7 +744,7 @@
             display: block;
         }
 
-        /* MISSION VERDICT ALERT BANNER */
+        /* VERDICT BANNER */
         .verdict-banner-wrap {
             display: none;
             padding: 18px 24px;
@@ -730,7 +754,6 @@
             animation: fadeIn 0.3s ease;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
         .verdict-banner-wrap.verdict-GO {
             display: flex;
             flex-direction: column;
@@ -760,7 +783,6 @@
             0% { box-shadow: 0 0 20px var(--red-glow); border-color: #ff1744; }
             100% { box-shadow: 0 0 45px rgba(255, 23, 68, 0.8); border-color: #ff5252; }
         }
-
         .verdict-title-row {
             display: flex;
             align-items: center;
@@ -849,7 +871,650 @@
         .td-warn { color: var(--amber) !important; }
         .td-fatal { color: var(--red) !important; font-weight: bold; }
 
-        /* TAB 2: LIVE TELEMETRY STYLES */
+        /* ======================================================== */
+        /* ★ TAB 2: ASTRONAUT DEEP MEDICAL DOSSIER & FLIGHT HERITAGE */
+        /* ======================================================== */
+        .dossier-layout {
+            display: grid;
+            grid-template-columns: 310px 1fr;
+            gap: 20px;
+            height: calc(100vh - 160px);
+            min-height: 580px;
+        }
+        @media (max-width: 1050px) {
+            .dossier-layout { grid-template-columns: 1fr; height: auto; }
+        }
+
+        .dossier-sidebar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+        .dossier-sidebar-title {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+        }
+        .dossier-astro-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+        .dossier-astro-item:hover {
+            border-color: var(--border-glow);
+            background: var(--bg-card-hover);
+            transform: translateX(3px);
+        }
+        .dossier-astro-item.active {
+            border-color: var(--cyan);
+            background: #14233e;
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+        }
+        .dossier-astro-item.active::after {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; bottom: 0; width: 4px;
+            background: var(--cyan);
+            border-radius: 4px 0 0 4px;
+        }
+        .dossier-avatar-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #090e17;
+            border: 2px solid var(--border-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--cyan);
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .dossier-avatar-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .dossier-astro-item.active .dossier-avatar-thumb {
+            border-color: var(--cyan);
+            box-shadow: 0 0 12px var(--cyan-glow);
+        }
+        .dossier-item-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex: 1;
+        }
+        .dossier-item-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .dossier-item-callsign {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--cyan);
+        }
+        .dossier-item-status {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--green);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .dossier-item-status::before {
+            content: "●";
+            font-size: 8px;
+        }
+
+        /* Dossier Main Content Window */
+        .dossier-detail-view {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 22px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Official NASA Medical Header Banner */
+        .bio-id-card {
+            background: linear-gradient(135deg, #101c33 0%, #0c1424 100%);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .bio-id-card::after {
+            content: "ASTROVITALS MEDICAL FLIGHT DIRECTORY // RESTRICTED";
+            position: absolute;
+            right: 14px;
+            bottom: 8px;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: rgba(255,255,255,0.1);
+            letter-spacing: 1px;
+        }
+        .bio-profile-left {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+        .bio-avatar-frame {
+            width: 108px;
+            height: 108px;
+            border-radius: 16px;
+            background: #060a12;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 24px rgba(0, 240, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            overflow: visible;
+        }
+        .bio-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+            display: block;
+        }
+        .bio-rank-tag {
+            position: absolute;
+            bottom: -8px;
+            background: linear-gradient(90deg, var(--nasa-blue), #0d3a78);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 8.5px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--cyan);
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+        .bio-id-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .bio-id-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .bio-callsign-badge {
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--cyan);
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .bio-id-meta {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .bio-id-meta span b { color: #fff; }
+        .bio-clearance-stamp {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+            font-family: var(--font-mono);
+        }
+        .clearance-badge {
+            background: rgba(0, 230, 118, 0.15);
+            color: var(--green);
+            border: 1px solid var(--green);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
+        }
+
+        /* Biomechanical Capability Radar / Bar Deck */
+        .bio-radar-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .bio-radar-title {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 6px;
+        }
+        .bio-radar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px 20px;
+        }
+        .radar-bar-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .radar-bar-head {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+        }
+        .radar-bar-head span:first-child { color: var(--text-secondary); }
+        .radar-bar-head span:last-child { color: #fff; font-weight: 700; }
+        .radar-bar-track {
+            height: 7px;
+            background: #060a12;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.06);
+            overflow: hidden;
+        }
+        .radar-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        /* Strictly Health & Medical Metrics Grid */
+        .bio-sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .bio-metric-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .metric-box-title {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 6px;
+        }
+        .health-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .health-row-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+        .health-label { color: var(--text-secondary); }
+        .health-val { font-weight: 700; color: #fff; }
+        .health-progress-bg {
+            height: 6px;
+            width: 100%;
+            background: #060a12;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .health-progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--nasa-blue-glow), var(--cyan));
+        }
+
+        /* Completed Operations History Section */
+        .past-operations-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .past-ops-title {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 8px;
+        }
+        .past-ops-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .past-op-card {
+            background: #090e17;
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .past-op-card:hover {
+            border-color: var(--border-glow);
+            background: #0d1422;
+        }
+        .past-op-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .past-op-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .past-op-meta {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--cyan);
+        }
+        .past-op-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            background: rgba(255,255,255,0.02);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+        }
+        @media (max-width: 800px) {
+            .past-op-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        .past-op-stat-lbl { color: var(--text-muted); }
+        .past-op-stat-val { font-weight: 700; color: #fff; margin-top: 2px; }
+        .past-op-verdict {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        /* ======================================================== */
+        /* ★ TAB 3: NASA FLIGHT OPERATIONS ATLAS (PROFESSIONAL BRIEF) */
+        /* ======================================================== */
+        .atlas-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 20px;
+            height: calc(100vh - 160px);
+            min-height: 580px;
+        }
+        @media (max-width: 1050px) {
+            .atlas-layout { grid-template-columns: 1fr; height: auto; }
+        }
+
+        .atlas-sidebar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+        .atlas-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+        .atlas-item:hover {
+            border-color: var(--border-glow);
+            background: var(--bg-card-hover);
+            transform: translateX(3px);
+        }
+        .atlas-item.active {
+            border-color: var(--cyan);
+            background: #14233e;
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+        }
+        .atlas-item.active::after {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; bottom: 0; width: 4px;
+            background: var(--cyan);
+            border-radius: 4px 0 0 4px;
+        }
+        .atlas-item.black-hole-item.active {
+            border-color: var(--red);
+            background: #200810;
+            box-shadow: 0 0 20px var(--red-glow);
+        }
+        .atlas-item.black-hole-item.active::after {
+            background: var(--red);
+        }
+        .atlas-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .atlas-item-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            line-height: 1.35;
+        }
+        .atlas-item-target {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--cyan);
+        }
+
+        /* Atlas Main Briefing View */
+        .atlas-detail-view {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 22px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .flight-card-banner {
+            background: linear-gradient(135deg, #101c33 0%, #0c1424 100%);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .flight-card-banner.danger-level-5 {
+            background: linear-gradient(135deg, #240a12 0%, #15060c 100%);
+            border-color: var(--red);
+            box-shadow: 0 0 30px var(--red-glow);
+        }
+        .flight-card-banner::after {
+            content: "ASTROVITALS EVA FLIGHT OPERATIONS DIRECTORY // FORM-48";
+            position: absolute;
+            right: 14px;
+            bottom: 8px;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: rgba(255,255,255,0.1);
+            letter-spacing: 1px;
+        }
+        .op-big-badge {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 900;
+            padding: 5px 12px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+        .flight-card-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+        .flight-card-target {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--cyan);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .flight-rules-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .rules-title {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rules-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .rules-list li::before {
+            content: "➔ ";
+            color: var(--cyan);
+        }
+        .btn-load-sim-op {
+            background: linear-gradient(135deg, var(--nasa-blue-glow) 0%, var(--nasa-blue) 100%);
+            border: 1px solid var(--cyan);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 12px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 0 16px rgba(11, 61, 145, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            letter-spacing: 0.8px;
+        }
+        .btn-load-sim-op:hover {
+            box-shadow: 0 0 24px var(--cyan-glow);
+            transform: translateY(-2px);
+        }
+
+        /* LIVE TELEMETRY LAYOUT */
         .live-grid-layout {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -858,7 +1523,6 @@
         @media (max-width: 1100px) {
             .live-grid-layout { grid-template-columns: 1fr; }
         }
-
         .chart-box {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
@@ -882,7 +1546,6 @@
             overflow: hidden;
             position: relative;
         }
-
         .scenario-bar {
             display: flex;
             flex-wrap: wrap;
@@ -911,7 +1574,7 @@
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
         }
 
-        /* HARDENING & FAULT INJECTION BUTTONS */
+        /* HARDENING ACTION BOXES */
         .security-action-box {
             display: flex;
             gap: 12px;
@@ -955,31 +1618,137 @@
         ::-webkit-scrollbar-track { background: var(--bg-deep); }
         ::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+        /* Toast Notification System */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            max-width: 380px;
+        }
+        .toast {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: #0e1524;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            pointer-events: auto;
+            font-family: var(--font-ui);
+            animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .toast.hide {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        @keyframes toastSlideIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .toast-critical {
+            border-color: var(--red);
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.35);
+        }
+        .toast-critical .toast-icon { color: var(--red); }
+        .toast-warn {
+            border-color: var(--amber);
+            box-shadow: 0 0 15px rgba(255, 171, 0, 0.3);
+        }
+        .toast-warn .toast-icon { color: var(--amber); }
+        .toast-ok {
+            border-color: var(--green);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+        }
+        .toast-ok .toast-icon { color: var(--green); }
+        .toast-info {
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+        .toast-info .toast-icon { color: var(--cyan); }
+        .toast-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+        .toast-body { flex: 1; }
+        .toast-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .toast-msg {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* SSE Real-time Pulsing Indicator */
+        .sse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .sse-dot.connected {
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: ssePulse 2s infinite;
+        }
+        .sse-dot.disconnected {
+            background: var(--amber);
+            box-shadow: 0 0 8px var(--amber);
+            animation: none;
+        }
+        @keyframes ssePulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 230, 118, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+        }
     </style>
+    <!-- Chart.js CDN for Real-Time Telemetry Trends -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
     <!-- 1. TOP CONDUCTOR FLIGHT BAR -->
     <header class="flight-bar">
-        <div class="brand-container">
-            <div class="nasa-insignia">NASA BIO-CORE</div>
+        <div class="brand-container" onclick="switchMainTab('digital-twin')">
+            <div class="brand-logo-frame">
+                <img src="/static/img/astrovitals_logo.png" alt="AstroVitals" class="brand-logo-img">
+            </div>
             <div class="brand-titles">
-                <div class="brand-main">ASTROLOGIC <span>X</span> // MISSION CONTROL</div>
-                <div class="brand-sub">UZBEK SPACE CREW BIO-DIGITAL TWIN & FLIGHT MEDICINE PLATFORM</div>
+                <div class="brand-main">ASTRO<span class="brand-vitals">VITALS</span> <span class="brand-tag">// MISSION CONTROL</span></div>
+                <div class="brand-sub">AUTONOMOUS SPACE CREW BIO-DIGITAL TWIN &amp; FLIGHT MEDICINE PLATFORM</div>
             </div>
         </div>
 
         <nav class="nav-tabs">
-            <button class="nav-btn active" onclick="switchMainTab('digital-twin')">🧬 BIO-DIGITAL TWIN</button>
-            <button class="nav-btn" onclick="switchMainTab('live-telemetry')">📡 JONLI TELEMETRIYA</button>
-            <button class="nav-btn" onclick="switchMainTab('crew-dossier')">👨‍🚀 EKIPAJ DOSYESI</button>
-            <button class="nav-btn" onclick="switchMainTab('operations-atlas')">🪐 OPERATSIYALAR ATLASI</button>
-            <button class="nav-btn" onclick="switchMainTab('cyber-security')">🛡️ APPARAT XAVFSIZLIGI</button>
+            <button class="nav-btn active" id="tabBtn-digital-twin" onclick="switchMainTab('digital-twin')">🧬 BIO-DIGITAL TWIN</button>
+            <button class="nav-btn" id="tabBtn-live-telemetry" onclick="switchMainTab('live-telemetry')">📡 JONLI TELEMETRIYA</button>
+            <button class="nav-btn" id="tabBtn-crew-dossier" onclick="switchMainTab('crew-dossier')">👨‍🚀 EKIPAJ</button>
+            <button class="nav-btn" id="tabBtn-operations-atlas" onclick="switchMainTab('operations-atlas')">🪐 OPERATSIYALAR</button>
+            <button class="nav-btn" id="tabBtn-cyber-security" onclick="switchMainTab('cyber-security')">🛡️ XAVFSIZLIK</button>
         </nav>
 
         <div class="flight-clock-bar">
+            <div class="clock-block" style="flex-direction:row; align-items:center; gap:8px;">
+                <span class="sse-dot connected" id="topSseDot"></span>
+                <span class="clock-value" id="topSseText" style="font-size:11px; color:var(--green)">SSE ULANDI</span>
+            </div>
             <div class="clock-block">
-                <span class="clock-label">DSN ALOQA</span>
+                <span class="clock-label">DSN TELEMETRIYA</span>
                 <span class="clock-value" style="color:var(--green)">ONLINE ● 8.2 kbps</span>
             </div>
             <div class="clock-block">
@@ -993,6 +1762,9 @@
             <div class="status-badge">TIZIM NOMINAL</div>
         </div>
     </header>
+
+    <!-- Global Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
 
     <!-- 2. MAIN WORKSPACE BODY -->
     <main class="workspace-body">
@@ -1021,7 +1793,7 @@
                 <div class="step-item" id="stepIndicator3" onclick="jumpToStep(3)">
                     <div class="step-num">3</div>
                     <div class="step-text">
-                        <div class="step-title">Simulyatsiya & Grafik Canvas</div>
+                        <div class="step-title">Simulyatsiya & 60FPS Canvas</div>
                         <div class="step-desc" id="stepSub3">Raqamli egizak reanimatsion tahlili</div>
                     </div>
                 </div>
@@ -1179,11 +1951,63 @@
 
         </section>
 
-        <!-- VIEW 2: LIVE TELEMETRY (EDGE SUIT MONITORING) -->
+        <!-- VIEW 2: CREW DOSSIER & FLIGHT HERITAGE (COMPREHENSIVE NASA REPOSITORY) -->
+        <section id="view-crew-dossier" class="view-panel">
+            <div class="section-banner">
+                <div>
+                    <div class="section-banner-title">👨‍🚀 ASTROVITALS EKIPAJ TIBBIY VA FIZIOLOGIK DOSYESI</div>
+                    <div class="section-banner-subtitle">Faqat salomatlik, gemodinamika va kardiologik chidamlilik ko'rsatkichlari hamda oldingi muvaffaqiyatli missiyalar arxivi.</div>
+                </div>
+            </div>
+
+            <div class="dossier-layout">
+                <!-- Sidebar: Crew Selector -->
+                <div class="dossier-sidebar" id="dossierRosterList">
+                    <div class="dossier-sidebar-title">
+                        <span>EKIPAJ A'ZOLARI (5)</span>
+                        <span style="color:var(--cyan)">ASTROVITALS</span>
+                    </div>
+                    <!-- Dynamically rendered via JS -->
+                </div>
+
+                <!-- Main Panel: In-Depth Medical & Past Missions Profile -->
+                <div class="dossier-detail-view" id="dossierDetailView">
+                    <!-- Dynamically populated by renderSelectedAstronautDossier(astroId) -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: OPERATIONS ATLAS (PROFESSIONAL NASA FLIGHT DIRECTORY) -->
+        <section id="view-operations-atlas" class="view-panel">
+            <div class="section-banner">
+                <div>
+                    <div class="section-banner-title">🪐 ASTROVITALS KOSMIK OPERATSIYALAR ATLASI VA FLIGHT RULES DIRECTORY</div>
+                    <div class="section-banner-subtitle">Astrofizik muhit telemetriyasi, skafandr xavf ko'paytuvchisi va Inviolable EVA Flight Rules spetsifikatsiyalari.</div>
+                </div>
+            </div>
+
+            <div class="atlas-layout">
+                <!-- Sidebar: Operations List -->
+                <div class="atlas-sidebar" id="atlasOperationsList">
+                    <div class="dossier-sidebar-title">
+                        <span>OPERATSIYALAR INDEXI (5)</span>
+                        <span style="color:var(--amber)">LEVEL 1 - 5</span>
+                    </div>
+                    <!-- Dynamically populated via JS -->
+                </div>
+
+                <!-- Main Panel: Full Flight Briefing Deck -->
+                <div class="atlas-detail-view" id="atlasDetailView">
+                    <!-- Dynamically populated by renderSelectedOperationAtlas(opId) -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: LIVE TELEMETRY (EDGE SUIT MONITORING) -->
         <section id="view-live-telemetry" class="view-panel">
             <div class="section-banner">
                 <div>
-                    <div class="section-banner-title">📡 REAL-TIME EDGE TELEMETRIYA VA TRIAJ TIZIMI</div>
+                    <div class="section-banner-title">📡 ASTROVITALS REAL-TIME TELEMETRIYA VA TRIAJ TIZIMI</div>
                     <div class="section-banner-subtitle">Kalman filtrli EKG/PPG signallari, Baevsky stress indeksi va 4 kishilik ekipaj avtomatik triaji.</div>
                 </div>
             </div>
@@ -1201,19 +2025,31 @@
             </div>
 
             <div class="live-grid-layout">
-                <!-- Left: Waveform & Kalman Graph -->
-                <div class="chart-box">
-                    <div class="chart-box-header">
-                        <span style="font-weight:700; font-size:13px;">📈 EKG / PPG JONLI TO'LQIN SHAKLI (RAW vs KALMAN FILTR)</span>
-                        <span style="font-family:var(--font-mono); font-size:11px; color:var(--cyan)" id="liveHeartRateDisplay">HR: -- BPM</span>
+                <!-- Left: Waveform & Kalman Graph + Chart.js Trend -->
+                <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div class="chart-box">
+                        <div class="chart-box-header">
+                            <span style="font-weight:700; font-size:13px;">📈 EKG / PPG JONLI TO'LQIN SHAKLI (RAW vs KALMAN FILTR)</span>
+                            <span style="font-family:var(--font-mono); font-size:11px; color:var(--cyan)" id="liveHeartRateDisplay">HR: -- BPM</span>
+                        </div>
+                        <div class="chart-canvas-wrap">
+                            <canvas id="liveWaveformCanvas" width="800" height="230"></canvas>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--text-muted); margin-top:6px;">
+                            <span>● Moviy: Kalman filtrlangan yurak pulsi</span>
+                            <span>● Qizil nuqtalar: Harakat shovqini (Motion artifacts)</span>
+                            <span>● Yashil: SpO2 to'yinishi</span>
+                        </div>
                     </div>
-                    <div class="chart-canvas-wrap">
-                        <canvas id="liveWaveformCanvas" width="800" height="260"></canvas>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--text-muted)">
-                        <span>● Moviy: Kalman filtrlangan yurak pulsi</span>
-                        <span>● Qizil nuqtalar: Harakat shovqini (Motion artifacts)</span>
-                        <span>● Yashil: SpO2 to'yinishi</span>
+
+                    <div class="chart-box">
+                        <div class="chart-box-header">
+                            <span style="font-weight:700; font-size:13px;">📊 TELEMETRIYA DINAMIKASI (HR &amp; SpO2 TREND)</span>
+                            <span style="font-family:var(--font-mono); font-size:11px; color:var(--cyan)">CHART.JS REAL-TIME GRAFIK</span>
+                        </div>
+                        <div style="height: 180px; position: relative; width: 100%;">
+                            <canvas id="hrTrendChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
@@ -1244,37 +2080,11 @@
             </div>
         </section>
 
-        <!-- VIEW 3: CREW DOSSIER -->
-        <section id="view-crew-dossier" class="view-panel">
-            <div class="section-banner">
-                <div>
-                    <div class="section-banner-title">👨‍🚀 EKIPAJNING TO'LIQ BIOMEDIKAL DOSYESI</div>
-                    <div class="section-banner-subtitle">5 nafar o'zbek fazogiri uchun chuqur fiziologik va chidamlilik parametrlari.</div>
-                </div>
-            </div>
-            <div class="crew-grid" id="fullCrewDossierContainer">
-                <!-- Loaded via JS -->
-            </div>
-        </section>
-
-        <!-- VIEW 4: OPERATIONS ATLAS -->
-        <section id="view-operations-atlas" class="view-panel">
-            <div class="section-banner">
-                <div>
-                    <div class="section-banner-title">🪐 KOSMIK OPERATSIYALARNING TO'LIQ ATLASI</div>
-                    <div class="section-banner-subtitle">Level 1 dan Level 5 gacha barcha operatsiyalarning atrof-muhit xavf ko'rsatkichlari.</div>
-                </div>
-            </div>
-            <div class="ops-grid" id="fullOpsAtlasContainer">
-                <!-- Loaded via JS -->
-            </div>
-        </section>
-
         <!-- VIEW 5: CYBER & SEU HARDENING -->
         <section id="view-cyber-security" class="view-panel">
             <div class="section-banner" style="border-left-color:var(--green)">
                 <div>
-                    <div class="section-banner-title">🛡️ APPARATURIY RADIATSIYA (SEU) VA KRIPTOGRAFIK XAVFSIZLIK TESTI</div>
+                    <div class="section-banner-title">🛡️ ASTROVITALS APPARAT VA KRIPTOGRAFIK HIMOYA TIZIMI</div>
                     <div class="section-banner-subtitle">TMR (Triple Modular Redundancy) apparat tuzatish va AES-256-GCM shifrlash himoyasi.</div>
                 </div>
             </div>
@@ -1317,11 +2127,45 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // Security HTML Sanitizer Utility (XSS Prevention)
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Global Toast Notification Dispatcher
+        function showToast(type, title, msg) {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'critical' ? '🚨' : (type === 'warn' ? '⚠️' : (type === 'ok' ? '✓' : 'ℹ️'));
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-body">
+                    <div class="toast-title">${escapeHtml(title)}</div>
+                    <div class="toast-msg">${escapeHtml(msg)}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            }, 4200);
+        }
+
         // Global App State
         let crewData = {};
         let opsData = {};
         let selectedAstroId = null;
         let selectedOpId = null;
+        let activeDossierAstroId = null;
+        let activeAtlasOpId = null;
         let isSimulating = false;
         let liveWaveformHistory = [];
 
@@ -1329,8 +2173,211 @@
         let animFrameId = null;
         let simCanvasTime = 0;
 
+        // Realistic Past Missions Heritage Database for Each Astronaut
+        const ASTRONAUT_PAST_MISSIONS = {
+            "ASTRO-ROZIMUROD": [
+                {
+                    mission_name: "ISS Ekspeditsiya-67",
+                    year: "2024",
+                    duration_days: 196,
+                    role: "Kema Komandiri & EVA Spetsialisti",
+                    eva_count: 2,
+                    eva_hours: "14.5 soat",
+                    cardio_recovery: "Nominal (HR baseline 62 bpm ga 48 soatda tiklandi)",
+                    decompression_incidents: "0 (Nol dekompressiya)",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "NASA Exceptional Leadership Medali"
+                },
+                {
+                    mission_name: "Artemis III Oyga Qo'nish Sortie",
+                    year: "2025",
+                    duration_days: 14,
+                    role: "Shackleton Krateri EVA-1 Lideri",
+                    eva_count: 3,
+                    eva_hours: "21.2 soat",
+                    cardio_recovery: "VO2 max 53.5 ml/kg/min barqaror saqlandi",
+                    decompression_incidents: "Regolit chang infiltratsiyasi to'liq bloklandi",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "Artemis Lunar Surface Exploration Badge"
+                },
+                {
+                    mission_name: "Mars Transit Alpha Phase (Joriy)",
+                    year: "2026",
+                    duration_days: 4.2,
+                    role: "Ekipaj Komandiri & Tizim Muhandisi",
+                    eva_count: 0,
+                    eva_hours: "0.0 soat",
+                    cardio_recovery: "Kardiorespirator holat a'lo darajada",
+                    decompression_incidents: "Kabin bosimi 101.3 kPa barqaror",
+                    outcome: "FAOL MISSISYA",
+                    award: "Flight Deck Commander Insignia"
+                }
+            ],
+            "ASTRO-MUHAMMADZIYO": [
+                {
+                    mission_name: "NASA Human Research Program (HRP-4)",
+                    year: "2023",
+                    duration_days: 180,
+                    role: "Bosh Shifokor & Fiziologik Reanimatolog",
+                    eva_count: 1,
+                    eva_hours: "6.5 soat",
+                    cardio_recovery: "Ekipaj a'zolarida nol latent virus reaktivatsiyasi",
+                    decompression_incidents: "O'tkir gipoksiya protokoli mukammal sinovdan o'tdi",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "NASA Space Flight Medical Officer Pin"
+                },
+                {
+                    mission_name: "Lunar Gateway Medical Module Integration",
+                    year: "2025",
+                    duration_days: 45,
+                    role: "Orbital Tele-Tibbiyot & Kardiostimulyatsiya",
+                    eva_count: 2,
+                    eva_hours: "12.0 soat",
+                    cardio_recovery: "Gemodinamik ko'rsatkichlar 100% nominal",
+                    decompression_incidents: "0 (Gipobarik kamerada xavfsiz moslashuv)",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "Distinguished Space Surgeon Star"
+                },
+                {
+                    mission_name: "Mars Transit Alpha Phase (Joriy)",
+                    year: "2026",
+                    duration_days: 4.2,
+                    role: "Bosh Shifokor & Astrobiolog",
+                    eva_count: 0,
+                    eva_hours: "0.0 soat",
+                    cardio_recovery: "Resting HR 56 bpm (Eng barqaror vegetativ tonus)",
+                    decompression_incidents: "Profilaktik kislorod purji faol",
+                    outcome: "FAOL MISSISYA",
+                    award: "Chief Medical Officer Emblem"
+                }
+            ],
+            "ASTRO-ELDOR": [
+                {
+                    mission_name: "ISS Truss P6 Quyosh Panellari Mukammal Ta'miri",
+                    year: "2024",
+                    duration_days: 140,
+                    role: "Og'ir Fazo Konstruksiyalari Mutaxassisi",
+                    eva_count: 8,
+                    eva_hours: "56.8 soat",
+                    cardio_recovery: "Eng yuqori chidamlilik; laktat 24 soatda normallashdi",
+                    decompression_incidents: "Skafandr mexanik shikaslanishsiz 8 ta EVA bajardi",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "NASA Master Spacecraft EVA Specialist Ribbon"
+                },
+                {
+                    mission_name: "Lunar Heavy Regolith Seismic Drill Test",
+                    year: "2025",
+                    duration_days: 21,
+                    role: "Robotik Burg'ulash Bosh Muhandisi",
+                    eva_count: 4,
+                    eva_hours: "28.5 soat",
+                    cardio_recovery: "G-Tolerance 8.4g centrifuge tekshiruvidan muvaffaqiyatli o'tdi",
+                    decompression_incidents: "Og'ir seysmik tebranishda nol biologik anomaliya",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "Artemis Heavy Infrastructure Star"
+                },
+                {
+                    mission_name: "Mars Transit Alpha Phase (Joriy)",
+                    year: "2026",
+                    duration_days: 4.2,
+                    role: "Bosh Mexanik & Og'ir Robototexnika",
+                    eva_count: 0,
+                    eva_hours: "0.0 soat",
+                    cardio_recovery: "Mushak tonusi va kardiomassa to'liq saqlangan",
+                    decompression_incidents: "TMR skafandr O2 klapani faol",
+                    outcome: "FAOL MISSISYA",
+                    award: "Chief EVA Engineer Shield"
+                }
+            ],
+            "ASTRO-JASUR": [
+                {
+                    mission_name: "Mars Desert Research Station Analog (MDRS-240)",
+                    year: "2023",
+                    duration_days: 90,
+                    role: "Yetakchi Qoya Ekspeditsiyasi Geologi",
+                    eva_count: 14,
+                    eva_hours: "84.0 soat",
+                    cardio_recovery: "VO2 Max 59.5 ml/kg/min ga chiqdi (Ekipajdagi eng yuqori)",
+                    decompression_incidents: "O'ta yuqori jismoniy charchoqqa to'liq moslashuv",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "Planetary Field Exploration Laureate"
+                },
+                {
+                    mission_name: "Antarctica Concordia Deep-Freeze Isolation",
+                    year: "2024",
+                    duration_days: 365,
+                    role: "Kriogen Chidamlilik & Termik Sinov Mutaxassisi",
+                    eva_count: 6,
+                    eva_hours: "36.0 soat",
+                    cardio_recovery: "Gipotermik vazokonstriksiya reflekssi mukammal",
+                    decompression_incidents: "-82°C haroratda kardiostress barqaror o'tdi",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "Polar & Space Extreme Endurance Cross"
+                },
+                {
+                    mission_name: "Mars Transit Alpha Phase (Joriy)",
+                    year: "2026",
+                    duration_days: 4.2,
+                    role: "Yetakchi EVA Spetsialisti & Planetar Geolog",
+                    eva_count: 0,
+                    eva_hours: "0.0 soat",
+                    cardio_recovery: "Valles Marineris chuqur tushishiga 100% tayyor",
+                    decompression_incidents: "Skafandr bosimi nominal",
+                    outcome: "FAOL MISSISYA",
+                    award: "Ares Vanguard Pioneer Pin"
+                }
+            ],
+            "ASTRO-SHOHRUXMIRZO": [
+                {
+                    mission_name: "Orion Spacecraft Proximity Operations & Docking",
+                    year: "2024",
+                    duration_days: 28,
+                    role: "Qo'nish Moduli Sinov Uchuvchisi",
+                    eva_count: 1,
+                    eva_hours: "5.5 soat",
+                    cardio_recovery: "Vestibulyar barqarorlik 99% (Nol harakat kasalligi)",
+                    decompression_incidents: "Favqulodda orbital manyovrda 8.0g yuklama ushlandi",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "NASA Astronaut Pilot Wings"
+                },
+                {
+                    mission_name: "Lunar Gateway Starship High-Apogee Insertion",
+                    year: "2025",
+                    duration_days: 35,
+                    role: "Favqulodda Tormozlash & Gravitatsion Manyovr",
+                    eva_count: 2,
+                    eva_hours: "11.0 soat",
+                    cardio_recovery: "Kardiovaskulyar de-konditsionerlik aniqlanmadi",
+                    decompression_incidents: "Avtonom doklanish 0.04m aniqlikda bajarildi",
+                    outcome: "100% MUVAFFAQIYAT",
+                    award: "Orbital Precision Flight Award"
+                },
+                {
+                    mission_name: "Mars Transit Alpha Phase (Joriy)",
+                    year: "2026",
+                    duration_days: 4.2,
+                    role: "Qo'nish Moduli Uchuvchisi & Navigatsiya",
+                    eva_count: 0,
+                    eva_hours: "0.0 soat",
+                    cardio_recovery: "Reflekslar va neyrovizual reaksiya <180ms",
+                    decompression_incidents: "Navigatsion telemetriya to'liq nominal",
+                    outcome: "FAOL MISSISYA",
+                    award: "Falcon Flight Officer Insignia"
+                }
+            ]
+        };
+
         // Navigation Switcher
         function switchMainTab(tabKey) {
+            const aliases = {
+                'digital_twin': 'digital-twin',
+                'crew': 'crew-dossier',
+                'operations': 'operations-atlas',
+                'telemetry': 'live-telemetry',
+                'security': 'cyber-security'
+            };
+            if (aliases[tabKey]) tabKey = aliases[tabKey];
+
             document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
@@ -1339,7 +2386,8 @@
 
             const btns = document.querySelectorAll('.nav-btn');
             btns.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(tabKey)) {
+                const oc = btn.getAttribute('onclick') || '';
+                if (oc.includes(tabKey)) {
                     btn.classList.add('active');
                 }
             });
@@ -1349,9 +2397,132 @@
             } else {
                 stopCanvasAnimation();
             }
+
+            if (tabKey === 'crew-dossier') {
+                renderCrewDossierView();
+            }
+            if (tabKey === 'operations-atlas') {
+                renderOperationsAtlasView();
+            }
+            if (tabKey === 'live-telemetry') {
+                if (hrChart) hrChart.resize();
+            }
         }
 
-        // Stepper Navigation
+        // Prompt API compatibility aliases
+        function switchTab(tabId) {
+            switchMainTab(tabId);
+        }
+
+        function renderCrewProfile(astronautId) {
+            activeDossierAstroId = astronautId;
+            renderCrewDossierView();
+        }
+
+        function renderOperations() {
+            renderOpsCards();
+            renderOperationsAtlasView();
+        }
+
+        // Chart.js HR & SpO2 Real-Time Trend Chart
+        let hrChart = null;
+        function initHRChart() {
+            const canvas = document.getElementById('hrTrendChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            const ctx = canvas.getContext('2d');
+            hrChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'HR (BPM)',
+                            data: [],
+                            borderColor: '#00e8ff',
+                            backgroundColor: 'rgba(0, 232, 255, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.25,
+                            fill: false,
+                            pointRadius: 0,
+                            yAxisID: 'yHR'
+                        },
+                        {
+                            label: 'SpO2 (%)',
+                            data: [],
+                            borderColor: '#00e676',
+                            backgroundColor: 'rgba(0, 230, 118, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.25,
+                            fill: false,
+                            pointRadius: 0,
+                            yAxisID: 'ySpO2'
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#9cb1d1',
+                                font: { family: "'JetBrains Mono', monospace", size: 10 }
+                            }
+                        },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: {
+                            display: false,
+                            grid: { display: false }
+                        },
+                        yHR: {
+                            type: 'linear',
+                            position: 'left',
+                            min: 40,
+                            max: 200,
+                            grid: { color: 'rgba(28, 43, 69, 0.5)' },
+                            ticks: {
+                                color: '#00e8ff',
+                                font: { family: "'JetBrains Mono', monospace", size: 9 },
+                                stepSize: 40
+                            }
+                        },
+                        ySpO2: {
+                            type: 'linear',
+                            position: 'right',
+                            min: 70,
+                            max: 100,
+                            grid: { drawOnChartArea: false },
+                            ticks: {
+                                color: '#00e676',
+                                font: { family: "'JetBrains Mono', monospace", size: 9 },
+                                stepSize: 10
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateHRChart(hr, spo2) {
+            if (!hrChart) return;
+            const now = new Date();
+            const timeLabel = `${now.getMinutes()}:${String(now.getSeconds()).padStart(2, '0')}`;
+            hrChart.data.labels.push(timeLabel);
+            hrChart.data.datasets[0].data.push(hr);
+            hrChart.data.datasets[1].data.push(spo2);
+            if (hrChart.data.labels.length > 30) {
+                hrChart.data.labels.shift();
+                hrChart.data.datasets[0].data.shift();
+                hrChart.data.datasets[1].data.shift();
+            }
+            hrChart.update();
+        }
+
+        // Stepper Navigation in Digital Twin
         function jumpToStep(stepNum) {
             document.getElementById('stepPanel1').style.display = (stepNum === 1) ? 'block' : 'none';
             document.getElementById('stepPanel2').style.display = (stepNum === 2) ? 'block' : 'none';
@@ -1393,26 +2564,40 @@
 
                 renderCrewCards();
                 renderOpsCards();
-                renderDossier();
-                renderAtlas();
 
-                // Select default astronaut & operation (Jasur & Mars Canyon)
-                if (crewData['ASTRO-JASUR']) selectAstronaut('ASTRO-JASUR');
-                if (opsData['OP-03-MARS-CANYON-HARD']) selectOperation('OP-03-MARS-CANYON-HARD');
+                // Select default astronaut & operation
+                const defaultAstro = crewData['ASTRO-JASUR'] ? 'ASTRO-JASUR' : Object.keys(crewData)[0];
+                const defaultOp = opsData['OP-03-MARS-CANYON-HARD'] ? 'OP-03-MARS-CANYON-HARD' : Object.keys(opsData)[0];
+
+                if (defaultAstro) selectAstronaut(defaultAstro);
+                if (defaultOp) selectOperation(defaultOp);
+
+                activeDossierAstroId = defaultAstro;
+                activeAtlasOpId = defaultOp;
+
+                renderCrewDossierView();
+                renderOperationsAtlasView();
+
+                // Initialize Real-time Subsystems
+                initHRChart();
+                initSSE();
+
+                showToast("ok", "TIZIM TAYYOR", "AstroVitals Kosmik Boshqaruv Markazi onlayn holatda");
 
             } catch (err) {
                 console.error("Initial data load error:", err);
+                showToast("critical", "YUKLASH XATOSI", "Boshlang'ich ma'lumotlarni olishda xatolik yuz berdi");
             }
         }
 
-        // Render Step 1 Astronaut Cards
+        // Render Step 1 Astronaut Selection Cards
         function renderCrewCards() {
             const container = document.getElementById('crewCardsContainer');
             container.innerHTML = '';
 
             Object.values(crewData).forEach(astro => {
                 const isSel = (astro.id === selectedAstroId);
-                const initials = astro.name.substring(0, 2).toUpperCase();
+                const avatarSrc = astro.avatar_url || `/static/img/crew/${astro.name.toLowerCase()}.png`;
 
                 const card = document.createElement('div');
                 card.className = `astro-card ${isSel ? 'selected' : ''}`;
@@ -1421,16 +2606,21 @@
 
                 card.innerHTML = `
                     <div class="astro-card-top">
-                        <div class="astro-avatar">${initials}</div>
+                        <div class="astro-avatar">
+                            <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(astro.name)}">
+                        </div>
                         <div class="astro-info">
-                            <div class="astro-name">${astro.name}</div>
-                            <div class="astro-callsign">"${astro.callsign}" • ${astro.age} yosh</div>
-                            <div class="astro-role">${astro.role}</div>
+                            <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+                                <span class="astro-name">${escapeHtml(astro.name)}</span>
+                                <span style="font-family:var(--font-mono); font-size:9.5px; background:rgba(255,23,68,0.15); color:var(--red); border:1px solid rgba(255,23,68,0.3); padding:1px 5px; border-radius:3px;">🩸 ${escapeHtml(astro.blood_type || 'O+')}</span>
+                            </div>
+                            <div class="astro-callsign">"${escapeHtml(astro.callsign)}" • ${escapeHtml(astro.rank ? astro.rank.split(' ')[0] : '')} (${escapeHtml(astro.age)} yosh)</div>
+                            <div class="astro-role">${escapeHtml(astro.role)}</div>
                         </div>
                     </div>
                     <div class="astro-stats-table">
                         <div class="stat-row">
-                            <span class="stat-name">VO2 MAX (STAMINA)</span>
+                            <span class="stat-name">VO2 MAX (AEROBIK KUCH)</span>
                             <span class="stat-val">${astro.vo2_max} ml/kg/min</span>
                         </div>
                         <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${(astro.vo2_max/65)*100}%"></div></div>
@@ -1442,13 +2632,13 @@
                         <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${(astro.g_tolerance/9)*100}%; background:var(--amber)"></div></div>
 
                         <div class="stat-row">
-                            <span class="stat-name">RADIATSIYA TOLERANTI</span>
-                            <span class="stat-val">${astro.radiation_tolerance_sv} Sv</span>
+                            <span class="stat-name">MUSHAK MASSASI / BO'YI</span>
+                            <span class="stat-val">${astro.skeletal_muscle_mass_kg || 40} kg / ${astro.height_cm} sm</span>
                         </div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${(astro.radiation_tolerance_sv/1.0)*100}%; background:var(--green)"></div></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${((astro.skeletal_muscle_mass_kg || 40)/50)*100}%; background:var(--cyan)"></div></div>
                     </div>
                     <div class="skills-tag-box">
-                        ${(astro.specialty_skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('')}
+                        ${(astro.specialty_skills || []).map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('')}
                     </div>
                     <button class="btn-scenario ${isSel ? 'active' : ''}" style="width:100%; margin-top:4px;">
                         ${isSel ? '✓ TANLANDI' : 'RAQAMLI EGIZAK SIFATIDA TANLASH'}
@@ -1461,13 +2651,12 @@
         function selectAstronaut(astroId) {
             selectedAstroId = astroId;
             renderCrewCards();
-            document.getElementById('stepSub1').textContent = `Tanlandi: ${crewData[astroId].name} ("${crewData[astroId].callsign}")`;
-            
-            // Advance to step 2 after a brief delay
-            setTimeout(() => jumpToStep(2), 250);
+            if (crewData[astroId]) {
+                document.getElementById('stepSub1').textContent = `Tanlandi: ${crewData[astroId].name} ("${crewData[astroId].callsign}")`;
+            }
         }
 
-        // Render Step 2 Operation Cards
+        // Render Step 2 Operation Selection Cards
         function renderOpsCards() {
             const container = document.getElementById('opsCardsContainer');
             container.innerHTML = '';
@@ -1486,9 +2675,9 @@
                         <span class="op-level-badge level-${op.level}">LEVEL ${op.level}: ${op.level === 5 ? 'IMKONSIZ / HALOKATLI ☠️' : (op.level === 1 ? 'OSON' : (op.level === 2 ? "O'RTACHA" : (op.level === 3 ? 'QIYIN' : 'JUDA QIYIN')))}</span>
                         <span style="font-family:var(--font-mono); font-size:11px; color:var(--text-muted)">⏱️ ${op.duration_minutes} min</span>
                     </div>
-                    <div class="op-title">${op.title}</div>
-                    <div class="op-target">📍 MANZIL: ${op.target_body}</div>
-                    <div class="op-desc">${op.description}</div>
+                    <div class="op-title">${escapeHtml(op.title)}</div>
+                    <div class="op-target">📍 MANZIL: ${escapeHtml(op.target_body)}</div>
+                    <div class="op-desc">${escapeHtml(op.description)}</div>
                     
                     <div class="op-physics-matrix">
                         <div class="phys-item">
@@ -1516,10 +2705,9 @@
         function selectOperation(opId) {
             selectedOpId = opId;
             renderOpsCards();
-            document.getElementById('stepSub2').textContent = `Tanlandi: Level ${opsData[opId].level} (${opsData[opId].title.substring(0, 24)}...)`;
-
-            // Advance to step 3
-            setTimeout(() => jumpToStep(3), 250);
+            if (opsData[opId]) {
+                document.getElementById('stepSub2').textContent = `Tanlandi: Level ${opsData[opId].level} (${opsData[opId].title.substring(0, 24)}...)`;
+            }
         }
 
         function updateSummaryBar() {
@@ -1548,9 +2736,602 @@
             badge.textContent = `XAVF: LEVEL ${op.level} - ${op.level === 5 ? 'HALOKATLI (FATAL)' : (op.level >= 3 ? 'YUQORI XAVF' : 'BARQAROR')}`;
         }
 
-        // ==========================================
-        // REAL 60FPS GRAPHICS CANVAS FOR ENVIRONMENTS
-        // ==========================================
+        // ========================================================
+        // ★ TAB 2: ASTRONAUT MEDICAL DOSSIER & FLIGHT HERITAGE
+        // ========================================================
+        function renderCrewDossierView() {
+            const rosterContainer = document.getElementById('dossierRosterList');
+            if (!rosterContainer || Object.keys(crewData).length === 0) return;
+
+            // Retain active selection or default to first
+            if (!activeDossierAstroId || !crewData[activeDossierAstroId]) {
+                activeDossierAstroId = Object.keys(crewData)[0];
+            }
+
+            // Build roster sidebar
+            rosterContainer.innerHTML = `
+                <div class="dossier-sidebar-title">
+                    <span>EKIPAJ A'ZOLARI (5)</span>
+                    <span style="color:var(--cyan)">ASTROVITALS</span>
+                </div>
+            `;
+
+            Object.values(crewData).forEach(astro => {
+                const isActive = (astro.id === activeDossierAstroId);
+                const avatarSrc = astro.avatar_url || `/static/img/crew/${astro.name.toLowerCase()}.png`;
+
+                const item = document.createElement('div');
+                item.className = `dossier-astro-item ${isActive ? 'active' : ''}`;
+                item.onclick = () => {
+                    activeDossierAstroId = astro.id;
+                    renderCrewDossierView();
+                };
+
+                item.innerHTML = `
+                    <div class="dossier-avatar-thumb">
+                        <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(astro.name)}">
+                    </div>
+                    <div class="dossier-item-info">
+                        <div class="dossier-item-name">${escapeHtml(astro.name)}</div>
+                        <div class="dossier-item-callsign">"${escapeHtml(astro.callsign)}" • ${escapeHtml(astro.rank ? astro.rank.split(' ')[0] : '')}</div>
+                        <div class="dossier-item-status">100% PARVOZGA TAYYOR • ${escapeHtml(astro.blood_type || 'O+')}</div>
+                    </div>
+                `;
+                rosterContainer.appendChild(item);
+            });
+
+            // Render detailed medical dossier on right panel
+            renderSelectedAstronautDossier(activeDossierAstroId);
+        }
+
+        function renderSelectedAstronautDossier(astroId) {
+            const detailContainer = document.getElementById('dossierDetailView');
+            const astro = crewData[astroId];
+            if (!detailContainer || !astro) return;
+
+            const pastMissions = ASTRONAUT_PAST_MISSIONS[astroId] || [];
+            const avatarSrc = astro.avatar_url || `/static/img/crew/${astro.name.toLowerCase()}.png`;
+
+            // Calculate BMI and metrics
+            const heightM = astro.height_cm / 100;
+            const bmi = (astro.mass_kg / (heightM * heightM)).toFixed(1);
+            const smm = astro.skeletal_muscle_mass_kg || 40.0;
+            const musclePct = ((smm / astro.mass_kg) * 100).toFixed(1);
+            const rankShort = astro.rank ? astro.rank.split(' ')[0].toUpperCase() : 'ASTRO';
+
+            detailContainer.innerHTML = `
+                <!-- 1. ASTROVITALS OFFICIAL BIOMEDICAL HEADER -->
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:10px 16px; background:rgba(0, 240, 255, 0.05); border-radius:8px; border:1px solid rgba(0,240,255,0.25);">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <img src="/static/img/astrovitals_logo.png" style="width:34px; height:34px; object-fit:cover; border-radius:6px; border:1px solid rgba(0,240,255,0.5); box-shadow:0 0 12px rgba(0,240,255,0.4);">
+                        <div>
+                            <div style="font-family:var(--font-mono); font-size:12px; font-weight:800; color:var(--cyan); letter-spacing:1px;">ASTROVITALS BIO-MEDICAL DOSSIER // CREW HEALTH PROFILE</div>
+                            <div style="font-size:10px; color:var(--text-muted);">NASA / ESA CLASS-1 BIOASTRONAUTICS SPECIFICATION • LEVEL-1 ACTIVE READINESS</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <span style="font-family:var(--font-mono); font-size:10px; background:rgba(0,255,136,0.12); color:var(--green); border:1px solid rgba(0,255,136,0.3); padding:4px 8px; border-radius:4px; font-weight:700;">● TELEMETRY SYNCED</span>
+                        <span style="font-family:var(--font-mono); font-size:10px; background:rgba(0,240,255,0.12); color:var(--cyan); border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:4px; font-weight:700;">AES-256 ENCRYPTED</span>
+                    </div>
+                </div>
+
+                <!-- 2. ASTRONAUT IDENTITY & HIGH-RESOLUTION AVATAR CARD -->
+                <div class="bio-id-card">
+                    <div class="bio-profile-left">
+                        <div class="bio-avatar-frame">
+                            <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(astro.name)}" class="bio-avatar-img">
+                            <span class="bio-rank-tag">${escapeHtml(rankShort)}</span>
+                        </div>
+                        <div class="bio-id-details">
+                            <div class="bio-id-name">
+                                <span>${escapeHtml(astro.name)}</span>
+                                <span class="bio-callsign-badge">"${escapeHtml(astro.callsign)}"</span>
+                            </div>
+                            <div style="font-size:13px; color:#fff; font-weight:600; display:flex; align-items:center; gap:8px;">
+                                <span style="color:var(--cyan); font-family:var(--font-mono); font-size:12px;">${escapeHtml(astro.rank || 'Astronavt')}</span>
+                                <span style="color:var(--text-muted)">•</span>
+                                <span>${escapeHtml(astro.role)}</span>
+                            </div>
+                            <div class="bio-id-meta" style="margin-top:4px;">
+                                <span>ID: <b>${escapeHtml(astro.id)}</b></span>
+                                <span>YOSH: <b>${astro.age}</b></span>
+                                <span>BO'YI: <b>${astro.height_cm} sm</b></span>
+                                <span>VAZNI: <b>${astro.mass_kg} kg</b></span>
+                                <span>BMI: <b>${bmi} (Optimal)</b></span>
+                                <span>QON: <b style="color:var(--red)">🩸 ${escapeHtml(astro.blood_type || 'O+')}</b></span>
+                                <span>MUSHAK: <b style="color:var(--cyan)">${smm} kg (${musclePct}%)</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bio-clearance-stamp">
+                        <span class="clearance-badge">✓ ${escapeHtml(astro.flight_surgeon_clearance || "CLASS-1 TO'LIQ FAZOGA RUXSAT")}</span>
+                        <span style="font-size:10.5px; color:#fff; font-weight:600; margin-top:4px;">FLIGHT SURGEON TIBBIY XULOSASI TASDIQLANGAN</span>
+                        <span style="font-size:9.5px; color:var(--text-muted);">SUIT: <b>NASA-ECLSS-EMU-IV</b> • MAX EVA: <b>${astro.max_continuous_eva_hours || 9.5} SOAT</b></span>
+                        <span style="font-size:9.5px; color:var(--cyan);">KINETOZ/SAS IMMUNITETI: <b>${((astro.vestibular_motion_resistance || 0.95)*100).toFixed(0)}%</b></span>
+                    </div>
+                </div>
+
+                <!-- 3. BIOMECHANICAL 6-AXIS CAPABILITY RADAR & PERFORMANCE INDICATOR -->
+                <div class="bio-radar-panel">
+                    <div class="bio-radar-title">
+                        <span>⚡ BIOMEXANIK VA FIZIOLOGIK IMKONIYATLAR MATRITSASI (6-AXIS RADAR)</span>
+                        <span style="color:var(--cyan); font-size:10.5px;">KALIBRLANGAN RAQAMLI EGIZAK MODELI</span>
+                    </div>
+                    <div class="bio-radar-grid">
+                        <div class="radar-bar-item">
+                            <div class="radar-bar-head">
+                                <span>1. AEROBIK QUVVAT (VO2 MAX)</span>
+                                <span>${astro.vo2_max} ml/kg/min (${((astro.vo2_max/65)*100).toFixed(0)}%)</span>
+                            </div>
+                            <div class="radar-bar-track">
+                                <div class="radar-bar-fill" style="width:${(astro.vo2_max/65)*100}%; background:linear-gradient(90deg, #00e676, #00f0ff);"></div>
+                            </div>
+                        </div>
+
+                        <div class="radar-bar-item">
+                            <div class="radar-bar-head">
+                                <span>2. G-YUKLAMA CHIDAMLILIGI (+GZ)</span>
+                                <span>${astro.g_tolerance} g (${((astro.g_tolerance/9.0)*100).toFixed(0)}%)</span>
+                            </div>
+                            <div class="radar-bar-track">
+                                <div class="radar-bar-fill" style="width:${(astro.g_tolerance/9.0)*100}%; background:linear-gradient(90deg, #ffb300, #ff5722);"></div>
+                            </div>
+                        </div>
+
+                        <div class="radar-bar-item">
+                            <div class="radar-bar-head">
+                                <span>3. RADIATSIYAVIY IMMUNITET</span>
+                                <span>${astro.radiation_tolerance_sv} Sv (${((astro.radiation_tolerance_sv/1.0)*100).toFixed(0)}%)</span>
+                            </div>
+                            <div class="radar-bar-track">
+                                <div class="radar-bar-fill" style="width:${(astro.radiation_tolerance_sv/1.0)*100}%; background:linear-gradient(90deg, #00f0ff, #2979ff);"></div>
+                            </div>
+                        </div>
+
+                        <div class="radar-bar-item">
+                            <div class="radar-bar-head">
+                                <span>4. TERMIK & KESON MOSLASHUV</span>
+                                <span>${((astro.cold_tolerance || 0.8)*100).toFixed(0)}% (Yuqori)</span>
+                            </div>
+                            <div class="radar-bar-track">
+                                <div class="radar-bar-fill" style="width:${(astro.cold_tolerance || 0.8)*100}%; background:linear-gradient(90deg, #26c6da, #00e676);"></div>
+                            </div>
+                        </div>
+
+                        <div class="radar-bar-item">
+                            <div class="radar-bar-head">
+                                <span>5. NEYRO-PSIXOLOGIK RESILIENCE</span>
+                                <span>${((astro.psychological_resilience || 0.9)*100).toFixed(0)}%</span>
+                            </div>
+                            <div class="radar-bar-track">
+                                <div class="radar-bar-fill" style="width:${(astro.psychological_resilience || 0.9)*100}%; background:linear-gradient(90deg, #ab47bc, #00f0ff);"></div>
+                            </div>
+                        </div>
+
+                        <div class="radar-bar-item">
+                            <div class="radar-bar-head">
+                                <span>6. SKELET MUSHAK KUCHI (SMM)</span>
+                                <span>${smm} kg (${musclePct}%)</span>
+                            </div>
+                            <div class="radar-bar-track">
+                                <div class="radar-bar-fill" style="width:${(smm/50.0)*100}%; background:linear-gradient(90deg, #ff9100, #ffd600);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. STRICTLY COMPREHENSIVE 4-BOX MEDICAL & PHYSICAL CAPABILITIES GRID -->
+                <div class="bio-sections-grid">
+                    
+                    <!-- Box 1: Antropometriya & Tana Tarkibi -->
+                    <div class="bio-metric-box">
+                        <div class="metric-box-title">
+                            <span>🧬 ANTROPOMETRIYA & TANA TARKIBI</span>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Bo'yi va Tanasi og'irligi:</span>
+                                <span class="health-val">${astro.height_cm} sm / ${astro.mass_kg} kg</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:78%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Tana massasi indeksi (BMI):</span>
+                                <span class="health-val">${bmi} kg/m² (Kosmik Norma)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(bmi/30)*100}%; background:var(--green)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Skelet mushak massasi (SMM):</span>
+                                <span class="health-val">${smm} kg (${musclePct}%)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(smm/50)*100}%; background:linear-gradient(90deg, var(--green), var(--cyan))"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Tana yog' miqdori (Body Fat):</span>
+                                <span class="health-val">${astro.body_fat_pct || 11.8}% (Sportchi me'yori)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${((astro.body_fat_pct || 11.8)/20)*100}%; background:var(--amber)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Suyak zichligi (BMD T-score):</span>
+                                <span class="health-val">+${astro.bone_mineral_density_t || 1.3} SD (Osteopeniyaga chidamli)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:88%; background:var(--green)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Qon guruhi va Rezus-omil:</span>
+                                <span class="health-val" style="color:var(--red)">🩸 ${escapeHtml(astro.blood_type || 'O(I) Rh+')}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Box 2: Kardiorespirator & Aerobik Quvvat -->
+                    <div class="bio-metric-box">
+                        <div class="metric-box-title">
+                            <span>❤️ KARDIORESPIRATOR & AEROBIK QUVVAT</span>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Tinch holatdagi puls:</span>
+                                <span class="health-val">${astro.resting_hr} BPM (Sportchi Bradikardiyasi)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.resting_hr/100)*100}%; background:var(--green)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Maksimal yuklama pulsi:</span>
+                                <span class="health-val">${astro.max_hr} BPM</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.max_hr/210)*100}%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">VO2 Max (Kardiopulmonar chidamlilik):</span>
+                                <span class="health-val">${astro.vo2_max} ml/kg/min (Elita)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.vo2_max/65)*100}%; background:linear-gradient(90deg, var(--green), var(--cyan))"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">O'pka umumiy sig'imi (TLC / FVC):</span>
+                                <span class="health-val">${astro.lung_capacity_liters || 6.2} L / ${astro.forced_vital_capacity_liters || 5.1} L</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${((astro.lung_capacity_liters || 6.2)/7)*100}%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Qon bosimi & MAP:</span>
+                                <span class="health-val">${astro.resting_bp_sys} / ${astro.resting_bp_dia} mmHg (MAP: ${astro.mean_arterial_pressure || 92} mmHg)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:75%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Yurak tiklanish tezligi (HRR 60s):</span>
+                                <span class="health-val" style="color:var(--green)">-${astro.heart_rate_recovery_60s || 42} BPM / daqiqa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Box 3: Space Extreme Resilience -->
+                    <div class="bio-metric-box">
+                        <div class="metric-box-title">
+                            <span>🪐 FAZOVIY EKSTREMAL BARDOSHLIK & G-YUKLAMA</span>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Musbat G-Yuklama (+Gz Centrifuge):</span>
+                                <span class="health-val">${astro.g_tolerance} g (G-LOC Limiti)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.g_tolerance/9)*100}%; background:var(--amber)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Manfiy G-Yuklama (-Gz Red-out):</span>
+                                <span class="health-val">${astro.negative_g_tolerance || -2.8} g</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:72%; background:var(--amber)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Radiatsiya toleranti (Kumulyativ):</span>
+                                <span class="health-val">${astro.radiation_tolerance_sv} Sv (Sievert)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.radiation_tolerance_sv/1.0)*100}%; background:var(--green)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Gipobarik gipoksiya indeksi:</span>
+                                <span class="health-val">${((astro.hypoxia_tolerance_index || 0.98)*100).toFixed(1)}% (Yuqori tog'/fazo)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.hypoxia_tolerance_index || 0.98)*100}%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Kinetoz / Vestibulyar barqarorlik (SAS):</span>
+                                <span class="health-val">${((astro.vestibular_motion_resistance || 0.96)*100).toFixed(0)}% (Nominal)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.vestibular_motion_resistance || 0.96)*100}%; background:var(--green)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Skafandr termik ish me'yori:</span>
+                                <span class="health-val">${astro.thermal_regulation_range || "-85°C dan +115°C gacha"}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Box 4: Neuro-Cognitive & Biomechanical Performance -->
+                    <div class="bio-metric-box">
+                        <div class="metric-box-title">
+                            <span>🧠 NEYRO-PSIXOLOGIK & REAKSIYA TEZLIGI</span>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Psixomotor reaksiya vaqti (PVT):</span>
+                                <span class="health-val">${astro.reaction_time_ms || 195} ms (Tezkor impuls)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(1 - ((astro.reaction_time_ms || 195) - 150) / 150) * 100}%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Dual-Task kognitiv yuklama indeksi:</span>
+                                <span class="health-val">${((astro.cognitive_dual_task_index || 0.95)*100).toFixed(0)}%</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.cognitive_dual_task_index || 0.95)*100}%; background:linear-gradient(90deg, var(--green), var(--cyan))"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Neyro-psixologik barqarorlik:</span>
+                                <span class="health-val">${((astro.psychological_resilience || 0.9)*100).toFixed(0)}% (Vahimaga qarshi)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.psychological_resilience || 0.9)*100}%; background:var(--green)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Baevskiy vegetativ stress indeksi:</span>
+                                <span class="health-val">${astro.stress_index_baevsky || 50} unit (Xotirjam holat)</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:55%; background:var(--cyan)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">Bazal metabolizm quvvati:</span>
+                                <span class="health-val">${astro.basal_metabolic_rate_w} Watt</span>
+                            </div>
+                            <div class="health-progress-bg">
+                                <div class="health-progress-bar" style="width:${(astro.basal_metabolic_rate_w/120)*100}%; background:var(--amber)"></div>
+                            </div>
+                        </div>
+                        <div class="health-row">
+                            <div class="health-row-header">
+                                <span class="health-label">EVA terlash / suv yo'qotish tezligi:</span>
+                                <span class="health-val">${astro.sweat_rate_l_per_h} L/soat</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 5. COMPLETED PAST OPERATIONS & FLIGHT HERITAGE -->
+                <div class="past-operations-panel">
+                    <div class="past-ops-title">
+                        <span>🎖️ AVVALGI MUVAFFAQIYATLI BAJARILGAN KOSMIK OPERATSIYALAR VA PARVOZ MEROSI</span>
+                        <span style="font-size:11px; color:var(--cyan)">JAMI: ${pastMissions.length} TA KOSMIK MISSISYA QAYD ETILGAN</span>
+                    </div>
+
+                    <div class="past-ops-list">
+                        ${pastMissions.map((pm, idx) => `
+                            <div class="past-op-card">
+                                <div class="past-op-top">
+                                    <div class="past-op-name">
+                                        <span style="color:var(--green)">✓</span>
+                                        <span>${escapeHtml(pm.mission_name)}</span>
+                                    </div>
+                                    <div class="past-op-meta">YIL: ${escapeHtml(pm.year)} • DAVOMIYLIGI: ${escapeHtml(pm.duration_days)} KUN</div>
+                                </div>
+                                <div class="past-op-grid">
+                                    <div>
+                                        <div class="past-op-stat-lbl">BAJARILGAN ROL:</div>
+                                        <div class="past-op-stat-val">${escapeHtml(pm.role)}</div>
+                                    </div>
+                                    <div>
+                                        <div class="past-op-stat-lbl">OCHIQ FAZO (EVA):</div>
+                                        <div class="past-op-stat-val">${pm.eva_count} marta (${escapeHtml(pm.eva_hours)})</div>
+                                    </div>
+                                    <div>
+                                        <div class="past-op-stat-lbl">FIZIOLOGIK TIKLANISH:</div>
+                                        <div class="past-op-stat-val" style="color:var(--cyan)">${escapeHtml(pm.cardio_recovery)}</div>
+                                    </div>
+                                    <div>
+                                        <div class="past-op-stat-lbl">NATIJA & MUKOFOT:</div>
+                                        <div class="past-op-stat-val" style="color:var(--green)">${escapeHtml(pm.outcome)} • ${escapeHtml(pm.award)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========================================================
+        // ★ TAB 3: NASA FLIGHT OPERATIONS ATLAS VIEW
+        // ========================================================
+        function renderOperationsAtlasView() {
+            const listContainer = document.getElementById('atlasOperationsList');
+            if (!listContainer || Object.keys(opsData).length === 0) return;
+
+            // Retain selection
+            if (!activeAtlasOpId || !opsData[activeAtlasOpId]) {
+                activeAtlasOpId = Object.keys(opsData)[0];
+            }
+
+            listContainer.innerHTML = `
+                <div class="dossier-sidebar-title">
+                    <span>OPERATSIYALAR INDEXI (5)</span>
+                    <span style="color:var(--amber)">LEVEL 1 - 5</span>
+                </div>
+            `;
+
+            Object.values(opsData).forEach(op => {
+                const isActive = (op.id === activeAtlasOpId);
+                const isBH = (op.level === 5);
+
+                const item = document.createElement('div');
+                item.className = `atlas-item ${isBH ? 'black-hole-item' : ''} ${isActive ? 'active' : ''}`;
+                item.onclick = () => {
+                    activeAtlasOpId = op.id;
+                    renderOperationsAtlasView();
+                };
+
+                item.innerHTML = `
+                    <div class="atlas-item-header">
+                        <span class="op-level-badge level-${op.level}">LEVEL ${op.level}: ${op.level === 5 ? 'IMKONSIZ / FATAL ☠️' : (op.level === 1 ? 'OSON' : (op.level === 2 ? "O'RTACHA" : (op.level === 3 ? 'QIYIN' : 'JUDA QIYIN')))}</span>
+                        <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-muted)">⏱️ ${op.duration_minutes}m</span>
+                    </div>
+                    <div class="atlas-item-title">${op.title}</div>
+                    <div class="atlas-item-target">📍 ${op.target_body}</div>
+                `;
+                listContainer.appendChild(item);
+            });
+
+            // Render right side briefing deck
+            renderSelectedOperationAtlas(activeAtlasOpId);
+        }
+
+        function renderSelectedOperationAtlas(opId) {
+            const detailContainer = document.getElementById('atlasDetailView');
+            const op = opsData[opId];
+            if (!detailContainer || !op) return;
+
+            const isBH = (op.level === 5);
+
+            detailContainer.innerHTML = `
+                <!-- 1. FLIGHT CARD BANNER -->
+                <div class="flight-card-banner ${isBH ? 'danger-level-5' : ''}">
+                    <div style="flex:1;">
+                        <span class="op-big-badge level-${op.level}"><img src="/static/img/astrovitals_logo.png" style="width:16px; height:16px; object-fit:cover; vertical-align:middle; margin-right:6px; border-radius:2px;"> ASTROVITALS LEVEL ${op.level} KOSMIK OPERATSIYA</span>
+                        <div class="flight-card-title">${op.title}</div>
+                        <div class="flight-card-target">📍 MANZIL: ${op.target_body} • FLIGHT CODE: ${op.id}</div>
+                        <p style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-top:8px;">${op.description}</p>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+                        <button class="btn-load-sim-op" onclick="loadOpIntoSimulator('${op.id}')">
+                            <span>▶ RAQAMLI EGIZAK SIMULYATORIGA YUKLASH</span>
+                        </button>
+                        <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-muted)">PLANETAR STATUS: TASDIQLANGAN</span>
+                    </div>
+                </div>
+
+                <!-- 2. ASTROPHYSICAL & ENVIRONMENTAL TELEMETRY MATRIX -->
+                <div class="bio-metric-box">
+                    <div class="metric-box-title">
+                        <span>🪐 ASTROFIZIK SHAROIT VA ATROF-MUHIT KO'RSATKICHLARI</span>
+                    </div>
+                    <div class="op-physics-matrix" style="grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 14px;">
+                        <div class="phys-item">
+                            <span class="phys-lbl">GRAVITATSIYA MAYDONI</span>
+                            <span class="phys-val" style="font-size:15px; color:${isBH ? 'var(--red)' : '#fff'}">${op.gravity_g} g</span>
+                            <span style="font-size:9px; color:var(--text-muted)">Yer bilan solishtirma</span>
+                        </div>
+                        <div class="phys-item">
+                            <span class="phys-lbl">ATMOSFERA BOSIMI</span>
+                            <span class="phys-val" style="font-size:15px; color:var(--cyan)">${op.ambient_pressure_kpa} kPa</span>
+                            <span style="font-size:9px; color:var(--text-muted)">Barometrik zichlik</span>
+                        </div>
+                        <div class="phys-item">
+                            <span class="phys-lbl">HARORAT SPEKTRI</span>
+                            <span class="phys-val" style="font-size:15px; color:${op.ambient_temp_c < -100 ? '#80d8ff' : '#fff'}">${op.ambient_temp_c} °C</span>
+                            <span style="font-size:9px; color:var(--text-muted)">Termik stress</span>
+                        </div>
+                        <div class="phys-item">
+                            <span class="phys-lbl">IONLASHTIRUVCHI RADIATSIYA</span>
+                            <span class="phys-val" style="font-size:15px; color:${op.radiation_mSv_per_hour > 100 ? 'var(--red)' : 'var(--green)'}">${op.radiation_mSv_per_hour} mSv/soat</span>
+                            <span style="font-size:9px; color:var(--text-muted)">Quyosh va GCR dozasi</span>
+                        </div>
+                        <div class="phys-item">
+                            <span class="phys-lbl">RELYEF VA SIRPANISH QIYINLIGI</span>
+                            <span class="phys-val" style="font-size:15px; color:var(--amber)">${(op.terrain_difficulty * 10).toFixed(1)} / 10.0</span>
+                            <span style="font-size:9px; color:var(--text-muted)">Yurish barqarorligi</span>
+                        </div>
+                        <div class="phys-item">
+                            <span class="phys-lbl">SKAFANDR XAVF MULTIPLIERI</span>
+                            <span class="phys-val" style="font-size:15px; color:${op.suit_hazard_multiplier > 5 ? 'var(--red)' : 'var(--cyan)'}">${op.suit_hazard_multiplier}x</span>
+                            <span style="font-size:9px; color:var(--text-muted)">Bosim yemirilish koeff.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. INVIOLABLE EVA FLIGHT RULES & ABORT PROTOCOL -->
+                <div class="flight-rules-box">
+                    <div class="rules-title">
+                        <span>⚠️ NASA INVIOLABLE EVA FLIGHT RULES (QAT'IY QOIDALAR VA ABORT PROTOKOLI)</span>
+                    </div>
+                    <ul class="rules-list">
+                        <li><b>Kardiorespirator chegara:</b> Astronavt yurak pulsi 175 BPM dan oshganda EVA zudlik bilan to'xtatiladi va 100% O2 niqobi ulanadi.</li>
+                        <li><b>Kislorod bosimi:</b> Skafandr ichidagi O2 qisman bosimi 19.5 kPa dan pastga tushganda shoshilinch avtonom shlyuzga chekinish majburiy.</li>
+                        <li><b>Termik himoya:</b> Kriogen metan yoki akkretsion plazma sharoitida skafandr ichki harorati 15°C dan pastga tushsa zaxira isitish batareyalari ishga tushadi.</li>
+                        <li><b>Tidal Gradient (Qora tuynuk):</b> 2850g tortishish kuchi inson tanasini vertikal uzib yuboradi (Spaghettification) - bu missiya inson hayoti uchun qat'iyan taqiqlanadi.</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Direct loader from Atlas to Simulator
+        function loadOpIntoSimulator(opId) {
+            selectOperation(opId);
+            switchMainTab('digital-twin');
+            jumpToStep(3);
+        }
+
+        // ========================================================
+        // 60FPS GRAPHICS CANVAS FOR SPACE ENVIRONMENTS
+        // ========================================================
         function startCanvasAnimation() {
             if (!animFrameId) {
                 renderSimulationCanvas();
@@ -1585,28 +3366,21 @@
             const opLevel = op ? op.level : 3;
 
             if (opLevel === 5) {
-                // CYGNUS X-1 BLACK HOLE CANVAS
                 drawBlackHoleScene(ctx, w, h, simCanvasTime);
             } else if (opLevel === 3) {
-                // MARS VALLES MARINERIS CANYON CANVAS
                 drawMarsCanyonScene(ctx, w, h, simCanvasTime);
             } else if (opLevel === 4) {
-                // TITAN CRYOGENIC METHANE STORM
                 drawTitanScene(ctx, w, h, simCanvasTime);
             } else if (opLevel === 1) {
-                // LUNAR SOUTH POLE
                 drawMoonScene(ctx, w, h, simCanvasTime);
             } else {
-                // MARS ORBIT
                 drawMarsOrbitScene(ctx, w, h, simCanvasTime);
             }
 
             animFrameId = requestAnimationFrame(renderSimulationCanvas);
         }
 
-        // 1. MARS CANYON SCENE (Valles Marineris / Melas Chasma)
         function drawMarsCanyonScene(ctx, w, h, t) {
-            // Sky gradient (Martian dusty orange-red)
             const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
             skyGrad.addColorStop(0, '#1c0805');
             skyGrad.addColorStop(0.5, '#42140e');
@@ -1614,17 +3388,11 @@
             ctx.fillStyle = skyGrad;
             ctx.fillRect(0, 0, w, h);
 
-            // Sun (dim, small bluish-white in Martian dust)
             ctx.fillStyle = '#ffecd9';
             ctx.beginPath();
             ctx.arc(w * 0.75, h * 0.2, 14, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillStyle = 'rgba(255, 180, 140, 0.2)';
-            ctx.beginPath();
-            ctx.arc(w * 0.75, h * 0.2, 35, 0, Math.PI * 2);
-            ctx.fill();
 
-            // Background Distant Canyon Ridge
             ctx.fillStyle = '#40150f';
             ctx.beginPath();
             ctx.moveTo(0, h * 0.45);
@@ -1632,33 +3400,23 @@
                 const y = h * 0.42 + Math.sin(x * 0.005 + 1.2) * 35 + Math.cos(x * 0.015) * 15;
                 ctx.lineTo(x, y);
             }
-            ctx.lineTo(w, h);
-            ctx.lineTo(0, h);
-            ctx.fill();
+            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.fill();
 
-            // Midground Layer Canyon Wall (Left Cliff)
             ctx.fillStyle = '#2b0c08';
             ctx.beginPath();
             ctx.moveTo(0, h * 0.1);
             ctx.lineTo(w * 0.35, h * 0.55);
             ctx.lineTo(w * 0.3, h * 0.85);
-            ctx.lineTo(0, h);
-            ctx.fill();
+            ctx.lineTo(0, h); ctx.fill();
 
-            // Midground Layer Canyon Wall (Right Cliff)
             ctx.fillStyle = '#220805';
             ctx.beginPath();
             ctx.moveTo(w, h * 0.15);
             ctx.lineTo(w * 0.65, h * 0.58);
             ctx.lineTo(w * 0.7, h);
-            ctx.lineTo(w, h);
-            ctx.fill();
+            ctx.lineTo(w, h); ctx.fill();
 
-            // Canyon Floor Abyss
-            ctx.fillStyle = '#0f0402';
-            ctx.fillRect(0, h * 0.85, w, h * 0.15);
-
-            // Parallax Dust Particles (Martian Dust Storm)
+            // Parallax Dust Particles
             ctx.fillStyle = 'rgba(230, 110, 80, 0.45)';
             for (let i = 0; i < 40; i++) {
                 const px = (Math.sin(i * 123 + t * 0.8) * 0.5 + 0.5) * w;
@@ -1667,11 +3425,10 @@
                 ctx.fillRect(px, py, sz, sz);
             }
 
-            // Descending Astronaut Silhouette with glowing tether rope
+            // Descending Astronaut with glowing tether rope
             const astroX = w * 0.5 + Math.sin(t * 1.5) * 8;
             const astroY = h * 0.45 + Math.sin(t * 0.8) * 15;
 
-            // Tether line from cliff
             ctx.strokeStyle = '#00f0ff';
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -1679,30 +3436,17 @@
             ctx.quadraticCurveTo(w * 0.42, h * 0.28, astroX, astroY);
             ctx.stroke();
 
-            // Astronaut Body
             ctx.fillStyle = '#ffffff';
             ctx.beginPath();
-            ctx.arc(astroX, astroY - 12, 6, 0, Math.PI * 2); // helmet
+            ctx.arc(astroX, astroY - 12, 6, 0, Math.PI * 2);
             ctx.fill();
-            // Golden Visor
             ctx.fillStyle = '#ffab00';
             ctx.fillRect(astroX + 1, astroY - 14, 4, 4);
 
-            // Suit torso & limbs
             ctx.fillStyle = '#d0d8e8';
-            ctx.fillRect(astroX - 5, astroY - 6, 10, 14); // chest
+            ctx.fillRect(astroX - 5, astroY - 6, 10, 14);
             ctx.fillStyle = '#00f0ff';
-            ctx.fillRect(astroX - 2, astroY - 3, 4, 4); // chest HUD light
-
-            // Legs
-            ctx.strokeStyle = '#d0d8e8';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(astroX - 3, astroY + 8);
-            ctx.lineTo(astroX - 8, astroY + 20);
-            ctx.moveTo(astroX + 3, astroY + 8);
-            ctx.lineTo(astroX + 7, astroY + 22);
-            ctx.stroke();
+            ctx.fillRect(astroX - 2, astroY - 3, 4, 4);
 
             // Geological drill sparks
             if (Math.sin(t * 8) > 0.2) {
@@ -1711,28 +3455,15 @@
                     ctx.fillRect(astroX + 10 + Math.random() * 8, astroY + 16 + Math.random() * 8, 2, 2);
                 }
             }
-
-            // Depth Scale HUD line on right
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(w - 60, h * 0.2, 8, h * 0.6);
-            const depthPos = (h * 0.2) + ((Math.sin(t * 0.5) * 0.5 + 0.5) * (h * 0.6));
-            ctx.fillStyle = '#00f0ff';
-            ctx.fillRect(w - 64, depthPos - 2, 16, 4);
-            ctx.font = '10px JetBrains Mono';
-            ctx.fillText('-4.2 km (MELAS CHASMA)', w - 190, h * 0.2 - 6);
         }
 
-        // 2. CYGNUS X-1 BLACK HOLE SCENE (Impossible / Relativistic Accretion Disk)
         function drawBlackHoleScene(ctx, w, h, t) {
-            // Space void
             ctx.fillStyle = '#020005';
             ctx.fillRect(0, 0, w, h);
 
             const cx = w * 0.5;
             const cy = h * 0.5;
 
-            // Gravitational Lensing Distorted Background Stars
             ctx.fillStyle = '#ffffff';
             for (let i = 0; i < 60; i++) {
                 const angle = i * 13.5 + t * 0.05;
@@ -1742,32 +3473,6 @@
                 ctx.fillRect(sx, sy, 1.5, 1.5);
             }
 
-            // Relativistic Plasma Relativistic Jets (Up & Down)
-            const jetGrad = ctx.createLinearGradient(cx, cy, cx, 0);
-            jetGrad.addColorStop(0, 'rgba(0, 240, 255, 0.8)');
-            jetGrad.addColorStop(0.3, 'rgba(213, 0, 249, 0.4)');
-            jetGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = jetGrad;
-            ctx.beginPath();
-            ctx.moveTo(cx - 8, cy);
-            ctx.lineTo(cx - 35, 0);
-            ctx.lineTo(cx + 35, 0);
-            ctx.lineTo(cx + 8, cy);
-            ctx.fill();
-
-            const jetGradDown = ctx.createLinearGradient(cx, cy, cx, h);
-            jetGradDown.addColorStop(0, 'rgba(0, 240, 255, 0.8)');
-            jetGradDown.addColorStop(0.3, 'rgba(213, 0, 249, 0.4)');
-            jetGradDown.addColorStop(1, 'transparent');
-            ctx.fillStyle = jetGradDown;
-            ctx.beginPath();
-            ctx.moveTo(cx - 8, cy);
-            ctx.lineTo(cx - 35, h);
-            ctx.lineTo(cx + 35, h);
-            ctx.lineTo(cx + 8, cy);
-            ctx.fill();
-
-            // Relativistic Accretion Disk (Upper Glow Lensed Behind)
             ctx.save();
             ctx.translate(cx, cy);
             ctx.scale(1, 0.32);
@@ -1785,13 +3490,11 @@
             ctx.fill();
             ctx.restore();
 
-            // Event Horizon Sphere (Pure Black)
             ctx.fillStyle = '#000000';
             ctx.beginPath();
             ctx.arc(cx, cy, 48, 0, Math.PI * 2);
             ctx.fill();
 
-            // Photon Sphere Ring
             ctx.strokeStyle = '#00f0ff';
             ctx.lineWidth = 2.5;
             ctx.shadowColor = '#00f0ff';
@@ -1801,11 +3504,10 @@
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // Spaghettification Vectors (Tearing astronaut figure apart vertically)
+            // Spaghettified stretched silhouette
             const astX = cx + Math.cos(t * 1.8) * 90;
             const astY = cy + Math.sin(t * 1.8) * 28;
 
-            // Stretched silhouette (Spaghettified)
             ctx.strokeStyle = '#ff1744';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1818,20 +3520,16 @@
             ctx.arc(astX, astY - 26, 4, 0, Math.PI * 2);
             ctx.fill();
 
-            // Pulsing Red Alarm Overlay
             if (Math.sin(t * 6) > 0.3) {
                 ctx.fillStyle = 'rgba(255, 23, 68, 0.12)';
                 ctx.fillRect(0, 0, w, h);
-
                 ctx.font = '700 13px JetBrains Mono';
                 ctx.fillStyle = '#ff1744';
                 ctx.fillText('CRITICAL TIDAL GRADIENT: 2850g // EVENT HORIZON BREACH', w * 0.25, 36);
             }
         }
 
-        // 3. TITAN METHANE STORM
         function drawTitanScene(ctx, w, h, t) {
-            // Thick orange-brown haze
             const haze = ctx.createLinearGradient(0, 0, 0, h);
             haze.addColorStop(0, '#2b1a06');
             haze.addColorStop(0.6, '#4f310e');
@@ -1839,24 +3537,9 @@
             ctx.fillStyle = haze;
             ctx.fillRect(0, 0, w, h);
 
-            // Methane Sea (Kraken Mare)
             ctx.fillStyle = '#0a1014';
             ctx.fillRect(0, h * 0.65, w, h * 0.35);
 
-            // Waves on Methane Lake
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
-            ctx.lineWidth = 1.5;
-            for (let j = 0; j < 5; j++) {
-                const yWave = h * 0.68 + j * 16;
-                ctx.beginPath();
-                ctx.moveTo(0, yWave);
-                for (let x = 0; x <= w; x += 30) {
-                    ctx.lineTo(x, yWave + Math.sin(x * 0.02 + t * 3 + j) * 4);
-                }
-                ctx.stroke();
-            }
-
-            // Liquid Methane Rain Streaks (Slanted wind 35m/s)
             ctx.strokeStyle = 'rgba(120, 200, 220, 0.4)';
             ctx.lineWidth = 1.2;
             for (let i = 0; i < 45; i++) {
@@ -1869,13 +3552,10 @@
             }
         }
 
-        // 4. LUNAR SOUTH POLE
         function drawMoonScene(ctx, w, h, t) {
-            // Pitch black deep space
             ctx.fillStyle = '#020307';
             ctx.fillRect(0, 0, w, h);
 
-            // Stars
             ctx.fillStyle = '#ffffff';
             for (let i = 0; i < 70; i++) {
                 const sx = (i * 97) % w;
@@ -1883,36 +3563,24 @@
                 ctx.fillRect(sx, sy, 1.2, 1.2);
             }
 
-            // Blue Marble Earth on horizon
             ctx.fillStyle = '#1e88e5';
             ctx.beginPath();
             ctx.arc(w * 0.8, h * 0.25, 22, 0, Math.PI * 2);
             ctx.fill();
-            // Clouds
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(w * 0.78, h * 0.23, 7, 0, Math.PI * 2);
-            ctx.arc(w * 0.83, h * 0.27, 9, 0, Math.PI * 2);
-            ctx.fill();
 
-            // Lunar Regolith Crater Surface
             ctx.fillStyle = '#555b66';
             ctx.beginPath();
             ctx.moveTo(0, h * 0.65);
             for (let x = 0; x <= w; x += 30) {
                 ctx.lineTo(x, h * 0.65 + Math.sin(x * 0.01) * 20 + Math.cos(x * 0.03) * 8);
             }
-            ctx.lineTo(w, h);
-            ctx.lineTo(0, h);
-            ctx.fill();
+            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.fill();
         }
 
-        // 5. MARS ORBIT
         function drawMarsOrbitScene(ctx, w, h, t) {
             ctx.fillStyle = '#03050a';
             ctx.fillRect(0, 0, w, h);
 
-            // Rotating Mars curvature in bottom half
             const cx = w * 0.5;
             const cy = h * 1.3;
             const r = w * 0.8;
@@ -1926,13 +3594,6 @@
             ctx.beginPath();
             ctx.arc(cx, cy, r, 0, Math.PI * 2);
             ctx.fill();
-
-            // Atmosphere blue-violet thin limb
-            ctx.strokeStyle = 'rgba(100, 180, 255, 0.4)';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.arc(cx, cy, r + 2, Math.PI * 1.15, Math.PI * 1.85);
-            ctx.stroke();
         }
 
         // ==========================================
@@ -1950,7 +3611,6 @@
 
             ctx.clearRect(0, 0, w, h);
 
-            // Background Track
             ctx.beginPath();
             ctx.arc(cx, cy, r, Math.PI * 0.75, Math.PI * 2.25);
             ctx.strokeStyle = '#101827';
@@ -1958,11 +3618,9 @@
             ctx.lineCap = 'round';
             ctx.stroke();
 
-            // Clamped fraction
             const frac = Math.max(0, Math.min(1, (value - min) / (max - min)));
             const endAngle = Math.PI * 0.75 + frac * (Math.PI * 1.5);
 
-            // Active Arc
             ctx.beginPath();
             ctx.arc(cx, cy, r, Math.PI * 0.75, endAngle);
             ctx.strokeStyle = color;
@@ -2009,7 +3667,6 @@
         }
 
         function renderSimulationReport(report) {
-            // Normalize property names from MissionSimulationReport
             const peakHR = report.peak_hr || report.peak_heart_rate || 75;
             const minSpO2 = (report.min_spo2 !== undefined && report.min_spo2 !== null) ? report.min_spo2 : 98;
             const peakG = (report.peak_g_force !== undefined && report.peak_g_force !== null) ? report.peak_g_force : (report.peak_g_load || 1.0);
@@ -2020,7 +3677,6 @@
                 : ((report.survival_probability !== undefined && report.survival_probability !== null) ? report.survival_probability * 100 : 0);
             const deathCause = report.cause_of_death || report.failure_reason || report.medical_summary || "Noma'lum omil";
 
-            // Update Gauges with final peak stats
             document.getElementById('valHR').textContent = Math.round(peakHR);
             document.getElementById('valSpO2').textContent = minSpO2.toFixed(1);
             document.getElementById('valG').textContent = (peakG > 100) ? peakG.toFixed(0) : peakG.toFixed(1);
@@ -2039,7 +3695,6 @@
             drawGauge('gaugePres', suitPres, 0, 50, '#00e676', 'kPa');
             drawGauge('gaugeO2', suitO2, 0, 35, '#00f0ff', 'kPa');
 
-            // Verdict Banner
             const vBanner = document.getElementById('verdictBanner');
             vBanner.className = `verdict-banner-wrap verdict-${report.verdict}`;
 
@@ -2053,20 +3708,22 @@
                 survText.innerHTML = `OMON QOLISH EHTIMOLI: ${survPct.toFixed(1)}%`;
                 descText.textContent = `Astronavt ushbu kosmik operatsiyani fiziologik xavfsiz bajara oladi. Raqamli egizak barqaror natija ko'rsatdi.`;
                 causeBox.style.display = 'none';
+                showToast('ok', 'SIMULYATSIYA MUVAFFAQIYATLI', `Missiya holati: GO (Omon qolish: ${survPct.toFixed(1)}%)`);
             } else if (report.verdict === 'CAUTION_GO') {
                 badgeText.innerHTML = `⚠️ MISSISYA NATIJASI: CAUTION_GO (EHTIYOTKORLIK TALAB ETILADI)`;
                 survText.innerHTML = `OMON QOLISH EHTIMOLI: ${survPct.toFixed(1)}%`;
                 descText.textContent = `Yuqori charchoq, sovuq yoki gipoksiya ehtimoli aniqlandi. Qo'shimcha kislorod va zaxira kardiostimulyatsiya tavsiya etiladi.`;
                 causeBox.style.display = 'none';
+                showToast('warn', 'EHTIYOTKORLIK: CAUTION_GO', `Omon qolish: ${survPct.toFixed(1)}% - Qo'shimcha ehtiyot choralari zarur`);
             } else {
                 badgeText.innerHTML = `☠️ CRITICAL: FATAL_FAILURE (HALOKATLI XATOLIK - TAQIQLANADI)`;
                 survText.innerHTML = `OMON QOLISH EHTIMOLI: 0.0%`;
                 descText.textContent = `DIQQAT! Ushbu missiya inson biologiyasi va skafandr chidamlilik chegarasidan mutlaqo tashqarida. Simulyatsiya jarayonida astronavt halok bo'ldi!`;
                 causeBox.style.display = 'block';
                 causeBox.textContent = `HALOKAT SABABI: ${deathCause} (Vaqt: T+${(report.time_of_failure_min || 2.0).toFixed(1)}m)`;
+                showToast('critical', 'HALOKAT: FATAL_FAILURE', `Halokat sababi: ${deathCause}`);
             }
 
-            // Steps Table
             const tbody = document.getElementById('simTableBody');
             tbody.innerHTML = '';
             document.getElementById('simStepsCount').textContent = `${report.steps.length} ta minut qayd etildi`;
@@ -2101,29 +3758,105 @@
         }
 
         // ==========================================
-        // LIVE TELEMETRY LOOP & KALMAN WAVEFORM
+        // LIVE TELEMETRY & SSE STREAM LOGIC
         // ==========================================
-        async function updateLiveTelemetry() {
+        let lastScenarioMode = 'NOMINAL';
+        let sseSource = null;
+
+        function initSSE() {
+            const sseDot = document.getElementById('topSseDot');
+            const sseText = document.getElementById('topSseText');
+
+            function setSseStatus(connected) {
+                if (sseDot && sseText) {
+                    if (connected) {
+                        sseDot.className = 'sse-dot connected';
+                        sseText.textContent = 'SSE ULANDI';
+                        sseText.style.color = 'var(--green)';
+                    } else {
+                        sseDot.className = 'sse-dot disconnected';
+                        sseText.textContent = 'SSE QAYTA ULANMOQDA...';
+                        sseText.style.color = 'var(--amber)';
+                    }
+                }
+            }
+
+            if (window.EventSource) {
+                try {
+                    sseSource = new EventSource('/api/stream');
+                    sseSource.onopen = () => {
+                        setSseStatus(true);
+                    };
+                    sseSource.onmessage = (e) => {
+                        try {
+                            const data = JSON.parse(e.data);
+                            if (data.latest) {
+                                updateLiveTelemetry(data.latest, data.scenario, data.multi_crew);
+                            }
+                        } catch (parseErr) {
+                            console.error("SSE JSON parsing error:", parseErr);
+                        }
+                    };
+                    sseSource.onerror = () => {
+                        setSseStatus(false);
+                    };
+                } catch (e) {
+                    console.error("SSE init error:", e);
+                    setSseStatus(false);
+                    setInterval(fallbackPollTelemetry, 1000);
+                }
+            } else {
+                setSseStatus(false);
+                setInterval(fallbackPollTelemetry, 1000);
+            }
+        }
+
+        async function fallbackPollTelemetry() {
             try {
                 const res = await fetch('/api/telemetry');
                 const data = await res.json();
-                if (!data.latest) return;
+                if (data.latest) {
+                    updateLiveTelemetry(data.latest, data.scenario, data.multi_crew);
+                }
+            } catch (err) {}
+        }
 
-                document.getElementById('liveHeartRateDisplay').textContent = `HR: ${data.latest.filtered_hr.toFixed(1)} BPM | SpO2: ${data.latest.filtered_spo2.toFixed(1)}%`;
+        function updateLiveTelemetry(latest, scenario, multiCrew) {
+            if (!latest) return;
 
-                // Update Waveform buffer
-                liveWaveformHistory.push({
-                    raw: data.latest.raw_hr || data.latest.filtered_hr,
-                    filtered: data.latest.filtered_hr,
-                    spo2: data.latest.filtered_spo2
-                });
-                if (liveWaveformHistory.length > 80) liveWaveformHistory.shift();
+            const hrVal = latest.filtered_hr || latest.heart_rate || 75;
+            const spo2Val = latest.filtered_spo2 || latest.spo2 || 98;
 
-                drawLiveWaveform();
-                renderTriageTable(data.multi_crew || []);
+            const hrDisplay = document.getElementById('liveHeartRateDisplay');
+            if (hrDisplay) {
+                hrDisplay.textContent = `HR: ${hrVal.toFixed(1)} BPM | SpO2: ${spo2Val.toFixed(1)}%`;
+            }
 
-            } catch (err) {
-                // Ignore transient network errors
+            liveWaveformHistory.push({
+                raw: latest.raw_hr || hrVal,
+                filtered: hrVal,
+                spo2: spo2Val
+            });
+            if (liveWaveformHistory.length > 80) liveWaveformHistory.shift();
+
+            drawLiveWaveform();
+            updateHRChart(hrVal, spo2Val);
+
+            if (multiCrew && Array.isArray(multiCrew)) {
+                renderTriageTable(multiCrew);
+            }
+
+            if (scenario && scenario !== lastScenarioMode) {
+                lastScenarioMode = scenario;
+                const sNames = {
+                    'NOMINAL': "Nominal Rejim",
+                    'DRILLING': "Burg'ulash Tebranishi",
+                    'HYPOXIA': "O'tkir Gipoksiya",
+                    'PANIC': "Vahima (Panic Attack)",
+                    'MULTI_CREW': "Ekipaj Inqirozi"
+                };
+                const sType = scenario === 'NOMINAL' ? 'ok' : (scenario === 'HYPOXIA' || scenario === 'MULTI_CREW' ? 'critical' : 'warn');
+                showToast(sType, 'SSENARIY YANGILANDI', `${sNames[scenario] || scenario} faol holatga o'tdi`);
             }
         }
 
@@ -2137,7 +3870,6 @@
             ctx.fillStyle = '#05080f';
             ctx.fillRect(0, 0, w, h);
 
-            // Grid lines
             ctx.strokeStyle = '#0e1726';
             ctx.lineWidth = 1;
             for (let x = 0; x < w; x += 40) {
@@ -2187,12 +3919,12 @@
                 const badgeCls = isCrit ? 'level-5' : (m.triage_color === 'YELLOW' ? 'level-3' : 'level-1');
 
                 tr.innerHTML = `
-                    <td><strong>${m.astronaut_id}</strong></td>
-                    <td><span class="op-level-badge ${badgeCls}">${m.triage_color}</span></td>
+                    <td><strong>${escapeHtml(m.astronaut_id)}</strong></td>
+                    <td><span class="op-level-badge ${badgeCls}">${escapeHtml(m.triage_color)}</span></td>
                     <td>${(m.filtered_hr || m.heart_rate || 75).toFixed(1)}</td>
                     <td>${(m.filtered_spo2 || m.spo2 || 98).toFixed(1)}%</td>
                     <td>${(m.stress_index || 100).toFixed(0)}</td>
-                    <td style="color:var(--cyan)">${(m.allocated_actions || ['NOMINAL_MONITOR']).join(', ')}</td>
+                    <td style="color:var(--cyan)">${(m.allocated_actions || ['NOMINAL_MONITOR']).map(escapeHtml).join(', ')}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2200,43 +3932,59 @@
 
         async function triggerScenario(mode) {
             document.querySelectorAll('.btn-scenario').forEach(b => b.classList.remove('active'));
-            const activeBtn = document.getElementById('btnScen' + mode.charAt(0) + mode.slice(1).toLowerCase());
+            const btnMap = {
+                'NOMINAL': 'btnScenNominal',
+                'DRILLING': 'btnScenDrilling',
+                'HYPOXIA': 'btnScenHypoxia',
+                'PANIC': 'btnScenPanic',
+                'MULTI_CREW': 'btnScenMulti'
+            };
+            const activeBtn = document.getElementById(btnMap[mode]);
             if (activeBtn) activeBtn.classList.add('active');
 
             try {
-                await fetch('/api/scenario', {
+                const res = await fetch('/api/scenario', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({mode: mode})
                 });
+                const data = await res.json();
+                if (data.status === 'SUCCESS') {
+                    showToast('info', 'SSENARIY YUBORILDI', `${mode} buyrug'i tizimga uzatildi`);
+                }
             } catch (e) {
                 console.error(e);
+                showToast('critical', 'XATOLIK', `Ssenariyni o'zgartirishda xatolik: ${e.message}`);
             }
         }
 
         // ==========================================
-        // HARDENING FAULT INJECTION & CRYPTO TESTS
+        // FAULT INJECTION & CRYPTO TESTS
         // ==========================================
         async function injectBitFlipTest() {
             const box = document.getElementById('bitFlipResultBox');
             box.innerHTML = `<span style="color:var(--amber)">⚡ Radiatsiya zarbasi yuborilmoqda...</span>`;
+            showToast('warn', 'APPARAT TEKSHIRUVI', 'SEU bit-flip radiatsiya zarbasi simulyatsiya qilinmoqda...');
             try {
                 const res = await fetch('/api/test/bitflip', {method: 'POST'});
                 const data = await res.json();
                 const ev = data.event;
                 box.innerHTML = `
-                    <div style="color:var(--green)">✓ CRC-32 XATOLIKNI ILG'ADI: ${ev.crc_status}</div>
-                    <div style="color:var(--cyan)">🛡️ TMR O2 SOLENOID AVTO-TUZATILDI: Yangi qiymat = ${ev.tmr_repaired_val}</div>
-                    <div style="color:var(--text-muted)">Jami TMR apparat tiklashlar soni: ${ev.total_tmr_repairs}</div>
+                    <div style="color:var(--green)">✓ CRC-32 XATOLIKNI ILG'ADI: ${escapeHtml(ev.crc_status)}</div>
+                    <div style="color:var(--cyan)">🛡️ TMR O2 SOLENOID AVTO-TUZATILDI: Yangi qiymat = ${escapeHtml(ev.tmr_repaired_val)}</div>
+                    <div style="color:var(--text-muted)">Jami TMR apparat tiklashlar soni: ${escapeHtml(ev.total_tmr_repairs)}</div>
                 `;
+                showToast('ok', 'TMR O2 VALFI TIKLANDI', `Apparat xatosi avtomatik tuzatildi (${ev.crc_status})`);
             } catch (err) {
-                box.innerHTML = `<span style="color:var(--red)">Xatolik: ${err.message}</span>`;
+                box.innerHTML = `<span style="color:var(--red)">Xatolik: ${escapeHtml(err.message)}</span>`;
+                showToast('critical', 'TEST XATOLIK', err.message);
             }
         }
 
         async function injectCryptoTest(type) {
             const box = document.getElementById('cryptoResultBox');
-            box.innerHTML = `<span style="color:var(--cyan)">🛡️ ${type} hujumi sinovdan o'tkazilmoqda...</span>`;
+            box.innerHTML = `<span style="color:var(--cyan)">🛡️ ${escapeHtml(type)} hujumi sinovdan o'tkazilmoqda...</span>`;
+            showToast('info', 'KRIPTO TEST', `${type} hujumi sinovi boshlandi...`);
             try {
                 const res = await fetch('/api/test/crypto_attack', {
                     method: 'POST',
@@ -2247,36 +3995,35 @@
                 const r = data.result;
                 box.innerHTML = `
                     <div style="color:${r.detected ? 'var(--green)' : 'var(--red)'}">
-                        ${r.detected ? '✓ HUJUM TO\'LIQ BLOKLANDI' : '✗ HUJUM O\'TIB KETDI'} [${r.attack}]
+                        ${r.detected ? "✓ HUJUM TO'LIQ BLOKLANDI" : "✗ HUJUM O'TIB KETDI"} [${escapeHtml(r.attack)}]
                     </div>
-                    <div style="color:#fff; margin-top:4px;">Holat xabari: ${r.status_message}</div>
-                    <div style="color:var(--cyan)">Xavfsizlik hukmi: ${r.verdict}</div>
+                    <div style="color:#fff; margin-top:4px;">Holat xabari: ${escapeHtml(r.status_message)}</div>
+                    <div style="color:var(--cyan)">Xavfsizlik hukmi: ${escapeHtml(r.verdict)}</div>
                 `;
+                showToast(r.detected ? 'ok' : 'critical', 'KRIPTO HUKMI', r.status_message);
             } catch (err) {
-                box.innerHTML = `<span style="color:var(--red)">Xatolik: ${err.message}</span>`;
+                box.innerHTML = `<span style="color:var(--red)">Xatolik: ${escapeHtml(err.message)}</span>`;
+                showToast('critical', 'KRIPTO XATOLIK', err.message);
             }
         }
 
-        // Render Crew Dossier & Atlas
-        function renderDossier() {
-            const container = document.getElementById('fullCrewDossierContainer');
-            container.innerHTML = document.getElementById('crewCardsContainer').innerHTML;
-        }
-
-        function renderAtlas() {
-            const container = document.getElementById('fullOpsAtlasContainer');
-            container.innerHTML = document.getElementById('opsCardsContainer').innerHTML;
-        }
-
         // Live Clocks Loop
+        let metSeconds = 4 * 86400 + 18 * 3600 + 24 * 60 + 2;
         setInterval(() => {
             const now = new Date();
             document.getElementById('topUtcClock').textContent = now.toUTCString().split(' ')[4] + ' UTC';
+
+            metSeconds++;
+            const days = Math.floor(metSeconds / 86400);
+            const hrs = Math.floor((metSeconds % 86400) / 3600);
+            const mins = Math.floor((metSeconds % 3600) / 60);
+            const secs = metSeconds % 60;
+            const pad = (n) => String(n).padStart(2, '0');
+            document.getElementById('topMetClock').textContent = `T+${pad(days)}d ${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
         }, 1000);
 
         // App Init
         loadInitialData();
-        setInterval(updateLiveTelemetry, 500);
     </script>
 </body>
 </html>

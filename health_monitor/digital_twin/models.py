@@ -29,6 +29,28 @@ class AstronautProfile:
     sweat_rate_l_per_h: float             # Hydration loss rate under EVA exertion
     specialty_skills: List[str] = field(default_factory=list)
 
+    # Enhanced physical, physiological & biomechanical capabilities (NASA/ESA Class-1 Flight Standard)
+    rank: str = ""
+    avatar_url: str = ""
+    blood_type: str = "O(I) Rh+"
+    body_fat_pct: float = 12.0
+    skeletal_muscle_mass_kg: float = 38.0
+    bone_mineral_density_t: float = 1.2
+    lung_capacity_liters: float = 6.2
+    forced_vital_capacity_liters: float = 5.1
+    lactate_threshold_mmol: float = 4.2
+    heart_rate_recovery_60s: int = 42
+    mean_arterial_pressure: float = 93.0
+    negative_g_tolerance: float = -2.8
+    hypoxia_tolerance_index: float = 0.98
+    vestibular_motion_resistance: float = 0.97
+    thermal_regulation_range: str = "-85°C dan +115°C gacha"
+    max_continuous_eva_hours: float = 9.0
+    reaction_time_ms: int = 195
+    cognitive_dual_task_index: float = 0.94
+    stress_index_baevsky: float = 52.0
+    flight_surgeon_clearance: str = "CLASS-1 TO'LIQ FAZOGA RUXSAT (FLIGHT SURGEON CERTIFIED)"
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "id": self.id,
@@ -49,7 +71,27 @@ class AstronautProfile:
             "psychological_resilience": self.psychological_resilience,
             "basal_metabolic_rate_w": self.basal_metabolic_rate_w,
             "sweat_rate_l_per_h": self.sweat_rate_l_per_h,
-            "specialty_skills": self.specialty_skills
+            "specialty_skills": self.specialty_skills,
+            "rank": self.rank,
+            "avatar_url": self.avatar_url,
+            "blood_type": self.blood_type,
+            "body_fat_pct": self.body_fat_pct,
+            "skeletal_muscle_mass_kg": self.skeletal_muscle_mass_kg,
+            "bone_mineral_density_t": self.bone_mineral_density_t,
+            "lung_capacity_liters": self.lung_capacity_liters,
+            "forced_vital_capacity_liters": self.forced_vital_capacity_liters,
+            "lactate_threshold_mmol": self.lactate_threshold_mmol,
+            "heart_rate_recovery_60s": self.heart_rate_recovery_60s,
+            "mean_arterial_pressure": self.mean_arterial_pressure,
+            "negative_g_tolerance": self.negative_g_tolerance,
+            "hypoxia_tolerance_index": self.hypoxia_tolerance_index,
+            "vestibular_motion_resistance": self.vestibular_motion_resistance,
+            "thermal_regulation_range": self.thermal_regulation_range,
+            "max_continuous_eva_hours": self.max_continuous_eva_hours,
+            "reaction_time_ms": self.reaction_time_ms,
+            "cognitive_dual_task_index": self.cognitive_dual_task_index,
+            "stress_index_baevsky": self.stress_index_baevsky,
+            "flight_surgeon_clearance": self.flight_surgeon_clearance
         }
 
 

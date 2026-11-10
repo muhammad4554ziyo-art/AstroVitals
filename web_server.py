@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AstroLogic X - NASA Mission Control Autonomous Space Medicine Platform.
+AstroVitals - Autonomous Deep-Space Astronaut Health & Bio-Digital Twin Platform.
 Integrates Real-Time Suit Edge Telemetry and Bio-Digital Twin Pre-Mission Predictive Simulator.
 """
 
@@ -10,8 +10,9 @@ import time
 import json
 import asyncio
 import threading
-from typing import Dict, Any, List
-from flask import Flask, jsonify, request, render_template_string
+import queue
+from typing import Dict, Any, List, Generator
+from flask import Flask, jsonify, request, render_template_string, Response, stream_with_context
 
 from health_monitor.config import SecurityConfig, MissionParams
 from health_monitor.edge_daemon import AutonomousSuitEdgeDaemon
@@ -71,7 +72,7 @@ def simulation_background_loop():
 
             scenario_state["recent_frames"].append(result)
             if len(scenario_state["recent_frames"]) > 60:
-                scenario_state["recent_frames"].pop(0)
+                del scenario_state["recent_frames"][0]
 
             if mode == "MULTI_CREW":
                 raw_crew = SpaceflightScenarioSimulator.generate_multi_crew_crisis()
@@ -95,15 +96,83 @@ def simulation_background_loop():
                     for r, a in zip(ranked, alloc)
                 ]
 
+            # SSE broadcast – push latest telemetry and triage to all listeners
+            _publish_sse({
+                "latest": result,
+                "scenario": scenario_state["mode"],
+                "multi_crew": scenario_state["multi_crew_data"],
+                "ts": time.time()
+            })
+
             t_step += 0.5
             time.sleep(0.5)
         except Exception as exc:
             time.sleep(1.0)
 
+# SSE subscribers queue list (thread-safe)
+_sse_subscribers: List[queue.Queue] = []
+_sse_lock = threading.Lock()
+
+def _publish_sse(data: dict) -> None:
+    """Broadcast SSE event to all connected clients (drop if queue full)."""
+    msg = "data: " + json.dumps(data) + "\n\n"
+    with _sse_lock:
+        dead = []
+        for q in _sse_subscribers:
+            try:
+                q.put_nowait(msg)
+            except queue.Full:
+                dead.append(q)
+        for q in dead:
+            _sse_subscribers.remove(q)
+
+
 bg_thread = threading.Thread(target=simulation_background_loop, daemon=True)
 bg_thread.start()
 
 # ----------------- REST API ROUTES -----------------
+
+@app.route("/api/stream", methods=["GET"])
+def sse_stream():
+    """Server-Sent Events endpoint – real-time telemetry push (no polling needed)."""
+    client_q: queue.Queue = queue.Queue(maxsize=30)
+    with _sse_lock:
+        _sse_subscribers.append(client_q)
+
+    def generate() -> Generator[str, None, None]:
+        # Send initial snapshot immediately
+        if scenario_state["recent_frames"]:
+            yield "data: " + json.dumps({
+                "latest": scenario_state["recent_frames"][-1],
+                "scenario": scenario_state["mode"],
+                "multi_crew": scenario_state["multi_crew_data"],
+                "ts": time.time()
+            }) + "\n\n"
+        try:
+            while True:
+                try:
+                    msg = client_q.get(timeout=20)
+                    yield msg
+                except queue.Empty:
+                    # Keep-alive comment
+                    yield ": keep-alive\n\n"
+        except GeneratorExit:
+            with _sse_lock:
+                try:
+                    _sse_subscribers.remove(client_q)
+                except ValueError:
+                    pass
+
+    return Response(
+        stream_with_context(generate()),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        },
+    )
+
 
 @app.route("/api/telemetry", methods=["GET"])
 def get_telemetry():
@@ -237,9 +306,9 @@ def index():
 
 if __name__ == "__main__":
     PORT = 8080
-    HOST = "127.0.0.1"
+    HOST = "0.0.0.0"
     print(f"\n==================================================================")
-    print(f"  ASTROLOGIC X - NASA MISSION CONTROL INTERFACE STARTED")
+    print(f"  ASTROVITALS - MISSION CONTROL & BIO-DIGITAL TWIN PLATFORM")
     print(f"  Local URL: http://{HOST}:{PORT}")
     print(f"==================================================================\n")
     app.run(host=HOST, port=PORT, debug=False, threaded=True)

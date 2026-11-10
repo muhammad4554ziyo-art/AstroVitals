@@ -1,5 +1,9 @@
-# Edge-First Autonomous Astronaut Health Monitoring Software
-**Deep-Space Telemetry, Radiation-Hardened DSP, and Autonomous Life-Support Engine**
+# AstroVitals — Deep-Space Astronaut Health & Bio-Digital Twin Platform
+<p align="center">
+  <img src="static/img/astrovitals_logo.png" alt="AstroVitals Logo" width="220">
+  <br>
+  <b>Deep-Space Telemetry, Radiation-Hardened DSP, and Autonomous Life-Support Engine</b>
+</p>
 
 Designed for deep-space manned missions (Lunar South Pole / Mars Transit) operating under complete Earth communication blackouts, 4 to 24-minute light-time delay, zero-cloud availability, and extreme cosmic radiation hazards.
 
