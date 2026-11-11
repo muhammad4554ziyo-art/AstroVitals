@@ -649,21 +649,54 @@ HTML_CONTENT = """<!DOCTYPE html>
             transform: none;
         }
 
-        /* 60FPS CANVAS PANEL */
+        
+        /* ========================================================
+           HIGH-FIDELITY AEROSPACE SIMULATION & PLAYBACK DECK CSS
+           ======================================================== */
         .canvas-viewport-panel {
-            background: #000000;
-            border: 1px solid var(--border-glow);
+            background: #020409;
+            border: 1px solid rgba(0, 240, 255, 0.45);
             border-radius: 10px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.7);
-            height: 380px;
+            box-shadow: 0 8px 36px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(0, 0, 0, 0.9);
+            height: 480px;
         }
         #simEnvironmentCanvas {
             width: 100%;
             height: 100%;
             display: block;
         }
+
+        /* High-Tech Aerospace Corner Reticles */
+        .corner-reticle {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .corner-reticle.top-left {
+            top: 8px; left: 8px;
+            border-top: 2px solid var(--cyan);
+            border-left: 2px solid var(--cyan);
+        }
+        .corner-reticle.top-right {
+            top: 8px; right: 8px;
+            border-top: 2px solid var(--cyan);
+            border-right: 2px solid var(--cyan);
+        }
+        .corner-reticle.bottom-left {
+            bottom: 8px; left: 8px;
+            border-bottom: 2px solid var(--cyan);
+            border-left: 2px solid var(--cyan);
+        }
+        .corner-reticle.bottom-right {
+            bottom: 8px; right: 8px;
+            border-bottom: 2px solid var(--cyan);
+            border-right: 2px solid var(--cyan);
+        }
+
         .canvas-hud-overlay {
             position: absolute;
             top: 14px;
@@ -671,26 +704,37 @@ HTML_CONTENT = """<!DOCTYPE html>
             pointer-events: none;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             font-family: var(--font-mono);
-            background: rgba(5, 8, 15, 0.7);
-            padding: 8px 14px;
+            background: rgba(4, 9, 20, 0.85);
+            padding: 10px 14px;
             border-radius: 6px;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            backdrop-filter: blur(8px);
+            z-index: 4;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
         }
         .hud-line {
             font-size: 11px;
-            color: #fff;
+            color: #d8e5ff;
             display: flex;
             gap: 8px;
+            letter-spacing: 0.5px;
         }
         .hud-line span { color: var(--cyan); font-weight: 700; }
-        .canvas-hazard-banner {
+
+        .canvas-hazard-wrap {
             position: absolute;
             top: 14px;
             right: 16px;
             pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            z-index: 4;
+        }
+        .canvas-hazard-banner {
             font-family: var(--font-mono);
             font-size: 11px;
             font-weight: 800;
@@ -700,8 +744,340 @@ HTML_CONTENT = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+        .canvas-hazard-banner.level-1 { background: rgba(0, 230, 118, 0.2); border: 1px solid var(--green); color: var(--green); }
+        .canvas-hazard-banner.level-2 { background: rgba(0, 240, 255, 0.2); border: 1px solid var(--cyan); color: var(--cyan); }
+        .canvas-hazard-banner.level-3 { background: rgba(255, 171, 0, 0.2); border: 1px solid var(--amber); color: var(--amber); }
+        .canvas-hazard-banner.level-4 { background: rgba(255, 100, 20, 0.25); border: 1px solid #ff6414; color: #ff8533; }
+        .canvas-hazard-banner.level-5 { background: rgba(255, 23, 68, 0.35); border: 1px solid var(--red); color: var(--red); animation: hazardPulse 1s infinite alternate; }
+        @keyframes hazardPulse {
+            0% { box-shadow: 0 0 10px rgba(255, 23, 68, 0.4); }
+            100% { box-shadow: 0 0 25px rgba(255, 23, 68, 0.9); }
         }
 
+        .canvas-event-pill {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #9cb1d1;
+            background: rgba(8, 14, 28, 0.85);
+            border: 1px solid var(--border-subtle);
+            padding: 4px 10px;
+            border-radius: 4px;
+            max-width: 320px;
+            text-align: right;
+            backdrop-filter: blur(6px);
+        }
+
+        .canvas-cam-watermark {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            pointer-events: none;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: rgba(156, 177, 209, 0.6);
+            letter-spacing: 1px;
+            z-index: 4;
+        }
+
+        /* PLAYBACK CONTROL DECK TOOLBAR */
+        .sim-playback-toolbar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        .playback-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .transport-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-sim-control {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-sim-control:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--cyan);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .btn-sim-control.active-play {
+            background: rgba(0, 230, 118, 0.18);
+            border-color: var(--green);
+            color: var(--green);
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+        .btn-sim-control.active-audio {
+            background: rgba(0, 240, 255, 0.18);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .speed-selector-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+            background: var(--bg-deep);
+            padding: 3px 6px;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+        .speed-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-right: 4px;
+        }
+        .btn-speed {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .btn-speed:hover {
+            color: #fff;
+        }
+        .btn-speed.active-speed {
+            background: var(--cyan);
+            color: #000;
+            font-weight: 800;
+        }
+
+        .playback-audio-views {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .camera-mode-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-deep);
+            padding: 3px 6px;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+        .btn-cam-mode {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .btn-cam-mode:hover { color: #fff; }
+        .btn-cam-mode.active-cam {
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--cyan);
+            border: 1px solid rgba(0, 240, 255, 0.4);
+        }
+
+        /* TIMELINE SLIDER ROW */
+        .playback-timeline-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .timeline-slider-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .nasa-range {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #090e17;
+            outline: none;
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+        }
+        .nasa-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--cyan-glow);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+        .nasa-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .timeline-cur-lbl {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .phase-badge-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(5, 8, 15, 0.6);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+        .phase-badge-title {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+        }
+        .phase-pill {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: #00f0ff;
+            letter-spacing: 0.5px;
+        }
+
+        /* GAUGES + ECG CONTAINER */
+        .gauges-and-ecg-container {
+            display: grid;
+            grid-template-columns: 1fr 390px;
+            gap: 16px;
+        }
+        @media (max-width: 1200px) {
+            .gauges-and-ecg-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ECG OSCILLOSCOPE MONITOR CARD */
+        .ecg-monitor-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+        }
+        .ecg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+        }
+        .ecg-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .ecg-heart-icon {
+            font-size: 14px;
+            animation: heartPulse 0.8s infinite alternate;
+        }
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.25); }
+        }
+        .ecg-status-tags {
+            display: flex;
+            gap: 6px;
+        }
+        .ecg-tag {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            color: var(--cyan);
+        }
+        .ecg-canvas-wrap {
+            background: #02060b;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+        #canvasECG {
+            width: 100%;
+            height: 90px;
+            display: block;
+        }
+        .ecg-footer {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 6px;
+        }
+
+        /* TABLE ACTIVE PLAYBACK ROW */
+        .active-playback-row {
+            background: rgba(0, 240, 255, 0.18) !important;
+            border-left: 4px solid var(--cyan) !important;
+        }
+        .active-playback-row td {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        .clickable-step-row {
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .clickable-step-row:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+    
         /* GAUGES GRID */
         .gauges-bar {
             display: grid;
@@ -1835,6 +2211,7 @@ HTML_CONTENT = """<!DOCTYPE html>
                 </div>
             </div>
 
+            
             <!-- STEP 3 CONTENT: SIMULATION & REAL GRAPHIC CANVAS -->
             <div id="stepPanel3" class="step-content-panel" style="display:none;">
                 <div class="sim-cockpit-layout">
@@ -1852,7 +2229,7 @@ HTML_CONTENT = """<!DOCTYPE html>
                                 <span class="sel-val" id="summaryOpName">Tanlanmagan</span>
                             </div>
                         </div>
-                        <div style="display:flex; gap:12px;">
+                        <div style="display:flex; gap:12px; align-items:center;">
                             <button class="btn-scenario" onclick="jumpToStep(1)">O'zgartirish</button>
                             <button class="btn-launch-sim" id="btnRunSim" onclick="executeDigitalTwinSimulation()">
                                 <span>▶ RAQAMLI EGIZAK SIMULYATSIYASINI BOSHLASH</span>
@@ -1860,62 +2237,152 @@ HTML_CONTENT = """<!DOCTYPE html>
                         </div>
                     </div>
 
-                    <!-- REAL INTERACTIVE GRAPHIC CANVAS (Mars Canyon, Black Hole, etc.) -->
-                    <div class="canvas-viewport-panel">
+                    <!-- INTERACTIVE MISSION PLAYBACK CONTROLLER DECK -->
+                    <div class="sim-playback-toolbar" id="simPlaybackToolbar" style="display:none;">
+                        <div class="playback-controls-row">
+                            <div class="transport-buttons">
+                                <button class="btn-sim-control active-play" id="btnSimPlayPause" onclick="toggleSimPlayback()" title="O'ynatish / To'xtatish">
+                                    <span id="playPauseIcon">⏸</span> <span id="playPauseText">TO'XTATISH</span>
+                                </button>
+                                <button class="btn-sim-control" onclick="restartSimPlayback()" title="Boshidan boshlash">
+                                    <span>⏮</span> <span>BOSHDAN</span>
+                                </button>
+                                <button class="btn-sim-control" onclick="jumpToEndPlayback()" title="Yakuniy natijaga o'tish">
+                                    <span>⏭</span> <span>YAKUNGA</span>
+                                </button>
+                                <div class="speed-selector-group">
+                                    <span class="speed-label">TEZLIK:</span>
+                                    <button class="btn-speed active-speed" id="btnSpd1" onclick="setSimPlaybackSpeed(1)">1x</button>
+                                    <button class="btn-speed" id="btnSpd2" onclick="setSimPlaybackSpeed(2)">2x</button>
+                                    <button class="btn-speed" id="btnSpd5" onclick="setSimPlaybackSpeed(5)">5x</button>
+                                    <button class="btn-speed" id="btnSpd10" onclick="setSimPlaybackSpeed(10)">10x</button>
+                                </div>
+                            </div>
+                            
+                            <div class="playback-audio-views">
+                                <button class="btn-sim-control" id="btnSimAudio" onclick="toggleSimAudio()" title="Akustik monitoring">
+                                    <span id="audioIcon">🔇</span> <span id="audioLabel">OVOZ: O'CHIQ</span>
+                                </button>
+                                <div class="camera-mode-group">
+                                    <button class="btn-cam-mode active-cam" id="btnCamOrbital" onclick="setCameraMode('orbital')">🛰️ TAKTIK</button>
+                                    <button class="btn-cam-mode" id="btnCamThermal" onclick="setCameraMode('thermal')">🌡️ TERMIK</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TIMELINE SCRUBBER & MISSION PHASE BAR -->
+                        <div class="playback-timeline-row">
+                            <div class="timeline-slider-wrap">
+                                <input type="range" class="nasa-range" id="simTimelineSlider" min="0" max="60" step="0.1" value="0" oninput="onTimelineSliderInput(this.value)">
+                                <div class="timeline-labels">
+                                    <span id="timelineStartLbl">MET T+00:00</span>
+                                    <span class="timeline-cur-lbl" id="timelineCurLbl">MET T+00:00 (Qadam: 0/0)</span>
+                                    <span id="timelineEndLbl">MET T+60:00</span>
+                                </div>
+                            </div>
+                            <div class="phase-badge-wrap">
+                                <span class="phase-badge-title">MISSISYA BOSQICHI:</span>
+                                <div class="phase-pill" id="simPhasePill">1-BOSQICH: HAVO QULFI CHIQISH VA DASTLABKI TEKSHIRUV</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REAL HIGH-FIDELITY GRAPHIC VIEWPORT CANVAS -->
+                    <div class="canvas-viewport-panel" id="canvasViewportPanel">
                         <canvas id="simEnvironmentCanvas"></canvas>
                         
+                        <!-- CORNER RETICLES -->
+                        <div class="corner-reticle top-left"></div>
+                        <div class="corner-reticle top-right"></div>
+                        <div class="corner-reticle bottom-left"></div>
+                        <div class="corner-reticle bottom-right"></div>
+
+                        <!-- TOP LEFT TELEMETRY HUD -->
                         <div class="canvas-hud-overlay">
                             <div class="hud-line">MUHIT: <span id="hudEnvName">FAZOVIY MONITORING</span></div>
                             <div class="hud-line">GRAVITATSIYA: <span id="hudGravity">-- g</span></div>
                             <div class="hud-line">BOSIM: <span id="hudPressure">-- kPa</span></div>
                             <div class="hud-line">RADIATSIYA: <span id="hudRadiation">-- mSv/soat</span></div>
                             <div class="hud-line">HARORAT: <span id="hudTemp">-- °C</span></div>
+                            <div class="hud-line">SKAFANDR: <span id="hudSuitState" style="color:var(--green)">xEMU Mark-V // INTEGRITY 100%</span></div>
                         </div>
 
-                        <div class="canvas-hazard-banner level-1" id="hudHazardBadge">XAVF DARAJASI: NOMINAL</div>
+                        <!-- TOP RIGHT HAZARD & REAL-TIME EVENT BANNER -->
+                        <div class="canvas-hazard-wrap">
+                            <div class="canvas-hazard-banner level-1" id="hudHazardBadge">XAVF DARAJASI: NOMINAL</div>
+                            <div class="canvas-event-pill" id="hudLiveEventPill">TIZIM SHAY HOLATDA</div>
+                        </div>
+
+                        <!-- BOTTOM VIEW MODE WATERMARK -->
+                        <div class="canvas-cam-watermark" id="canvasCamWatermark">CAMERA: OPTICAL FEED // 60 FPS // HD TELEMETRY</div>
                     </div>
 
-                    <!-- CIRCULAR TELEMETRY GAUGES -->
-                    <div class="gauges-bar">
-                        <div class="gauge-card">
-                            <span class="gauge-label">Yurak Urishi (HR)</span>
-                            <div class="gauge-canvas-wrap">
-                                <canvas class="gauge-canvas" id="gaugeHR" width="110" height="110"></canvas>
-                                <div class="gauge-value-inside"><span id="valHR">--</span><span class="gauge-unit">BPM</span></div>
+                    <!-- CIRCULAR TELEMETRY GAUGES + REAL-TIME ECG MONITOR -->
+                    <div class="gauges-and-ecg-container">
+                        <div class="gauges-bar">
+                            <div class="gauge-card">
+                                <span class="gauge-label">Yurak Urishi (HR)</span>
+                                <div class="gauge-canvas-wrap">
+                                    <canvas class="gauge-canvas" id="gaugeHR" width="105" height="105"></canvas>
+                                    <div class="gauge-value-inside"><span id="valHR">--</span><span class="gauge-unit">BPM</span></div>
+                                </div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-label">Kislorod SpO2</span>
+                                <div class="gauge-canvas-wrap">
+                                    <canvas class="gauge-canvas" id="gaugeSpO2" width="105" height="105"></canvas>
+                                    <div class="gauge-value-inside"><span id="valSpO2">--</span><span class="gauge-unit">% SpO2</span></div>
+                                </div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-label">G-Yuklama</span>
+                                <div class="gauge-canvas-wrap">
+                                    <canvas class="gauge-canvas" id="gaugeG" width="105" height="105"></canvas>
+                                    <div class="gauge-value-inside"><span id="valG">--</span><span class="gauge-unit">g-Force</span></div>
+                                </div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-label">Skafandr Bosimi</span>
+                                <div class="gauge-canvas-wrap">
+                                    <canvas class="gauge-canvas" id="gaugePres" width="105" height="105"></canvas>
+                                    <div class="gauge-value-inside"><span id="valPres">--</span><span class="gauge-unit">kPa</span></div>
+                                </div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-label">O2 Qisman Bosimi</span>
+                                <div class="gauge-canvas-wrap">
+                                    <canvas class="gauge-canvas" id="gaugeO2" width="105" height="105"></canvas>
+                                    <div class="gauge-value-inside"><span id="valO2">--</span><span class="gauge-unit">kPa O2</span></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="gauge-card">
-                            <span class="gauge-label">Kislorod To'yinishi</span>
-                            <div class="gauge-canvas-wrap">
-                                <canvas class="gauge-canvas" id="gaugeSpO2" width="110" height="110"></canvas>
-                                <div class="gauge-value-inside"><span id="valSpO2">--</span><span class="gauge-unit">% SpO2</span></div>
+
+                        <!-- REAL-TIME LIVE MEDICAL ECG MONITOR STRIP -->
+                        <div class="ecg-monitor-card">
+                            <div class="ecg-header">
+                                <div class="ecg-title">
+                                    <span class="ecg-heart-icon" id="ecgHeartIcon">🫀</span>
+                                    <span>KLINIK ELEKTROKARDIOGRAMMA (ECG // LEAD II // 25 mm/s)</span>
+                                </div>
+                                <div class="ecg-status-tags">
+                                    <span class="ecg-tag" id="ecgBeatRate">PULSE: -- BPM</span>
+                                    <span class="ecg-tag" id="ecgRhythmTag" style="color:var(--green)">RITM: REGULAR SINUS</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="gauge-card">
-                            <span class="gauge-label">Gravitatsiya / Stress</span>
-                            <div class="gauge-canvas-wrap">
-                                <canvas class="gauge-canvas" id="gaugeG" width="110" height="110"></canvas>
-                                <div class="gauge-value-inside"><span id="valG">--</span><span class="gauge-unit">g-Force</span></div>
+                            <div class="ecg-canvas-wrap">
+                                <canvas id="canvasECG" width="380" height="90"></canvas>
                             </div>
-                        </div>
-                        <div class="gauge-card">
-                            <span class="gauge-label">Skafandr Bosimi</span>
-                            <div class="gauge-canvas-wrap">
-                                <canvas class="gauge-canvas" id="gaugePres" width="110" height="110"></canvas>
-                                <div class="gauge-value-inside"><span id="valPres">--</span><span class="gauge-unit">kPa</span></div>
-                            </div>
-                        </div>
-                        <div class="gauge-card">
-                            <span class="gauge-label">O2 Qisman Bosimi</span>
-                            <div class="gauge-canvas-wrap">
-                                <canvas class="gauge-canvas" id="gaugeO2" width="110" height="110"></canvas>
-                                <div class="gauge-value-inside"><span id="valO2">--</span><span class="gauge-unit">kPa O2</span></div>
+                            <div class="ecg-footer">
+                                <span>PR-INTERVAL: 146 ms</span>
+                                <span>QRS: 84 ms</span>
+                                <span>QTc: 398 ms</span>
+                                <span id="ecgStDev">ST: NOMINAL (+0.02 mV)</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- MISSION VERDICT ALERT BANNER -->
-                    <div class="verdict-banner-wrap" id="verdictBanner">
+                    <div class="verdict-banner-wrap" id="verdictBanner" style="display:none;">
                         <div class="verdict-title-row">
                             <div class="verdict-badge" id="verdictBadgeText">MISSISYA NATIJASI: GO</div>
                             <div class="verdict-survival" id="verdictSurvivalText">OMON QOLISH EHTIMOLI: 99.4%</div>
@@ -1929,7 +2396,7 @@ HTML_CONTENT = """<!DOCTYPE html>
                     <!-- STEP-BY-STEP SIMULATION LOG TABLE -->
                     <div class="sim-table-panel">
                         <div class="sim-table-title">
-                            <span>⏱️ SIMULYATSIYA BOSQICHMA-BOSQICH TELEMETRIYA JADVALI</span>
+                            <span>⏱️ SIMULYATSIYA BOSQICHMA-BOSQICH TELEMETRIYA JADVALI (BOSQICHNI TANLASH UCHUN QATORNI BOSING)</span>
                             <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono)" id="simStepsCount">0 bosqich qayd etildi</span>
                         </div>
                         <div class="table-scroll">
@@ -1942,9 +2409,9 @@ HTML_CONTENT = """<!DOCTYPE html>
                                         <th>Skafandr</th>
                                         <th>G-Yuklama</th>
                                         <th>Radiatsiya (mSv)</th>
-                                        <th>Metabolizm</th>
+                                        <th>Harorat</th>
                                         <th>Stress</th>
-                                        <th>Holat & Izoh</th>
+                                        <th>Holat & Hodisa Tavsifi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="simTableBody">
@@ -1956,7 +2423,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 
                 </div>
             </div>
-
+    
         </section>
 
         <!-- VIEW 2: CREW DOSSIER & FLIGHT HERITAGE (COMPREHENSIVE NASA REPOSITORY) -->
@@ -3337,12 +3804,120 @@ HTML_CONTENT = """<!DOCTYPE html>
             jumpToStep(3);
         }
 
+        
+        // ========================================================
+        // HIGH-FIDELITY AEROSPACE SIMULATION & PLAYBACK ENGINE
+        // ========================================================
+        let currentSimReport = null;
+        let simPlaybackCurrentMinute = 0;
+        let simPlaybackIsPlaying = false;
+        let simPlaybackSpeed = 1;
+        let simPlaybackLastTs = null;
+        let simAudioEnabled = false;
+        let audioCtx = null;
+        let lastHeartBeatTime = 0;
+        let cameraMode = 'orbital'; // 'orbital' or 'thermal'
+
+        // ECG Monitor State
+        let ecgCanvas = null;
+        let ecgCtx = null;
+        let ecgX = 0;
+        let lastEcgY = 45;
+        let ecgPhase = 0;
+        let ecgCurrentBpm = 75;
+        let ecgAnimId = null;
+
+        // Web Audio Synthesizer
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioClass) {
+                    audioCtx = new AudioClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playQuindarTone(isIntro) {
+            if (!simAudioEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(isIntro ? 2525 : 2475, ctx.currentTime);
+                gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.16);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.16);
+            } catch(e) {}
+        }
+
+        function playBiometricBeep(bpm, isAlarm) {
+            if (!simAudioEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = isAlarm ? 'sawtooth' : 'sine';
+                const freq = isAlarm ? 880 : (bpm > 160 ? 720 : (bpm > 120 ? 620 : 520));
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                if (isAlarm) {
+                    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.18);
+                }
+                gain.gain.setValueAtTime(isAlarm ? 0.10 : 0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (isAlarm ? 0.22 : 0.07));
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + (isAlarm ? 0.22 : 0.07));
+            } catch(e) {}
+        }
+
+        function toggleSimAudio() {
+            simAudioEnabled = !simAudioEnabled;
+            const btn = document.getElementById('btnSimAudio');
+            if (btn) {
+                btn.className = `btn-sim-control ${simAudioEnabled ? 'active-audio' : ''}`;
+                btn.innerHTML = simAudioEnabled ? `<span>🔊 OVOZ: YONIQ</span>` : `<span>🔇 OVOZ: O'CHIQ</span>`;
+            }
+            if (simAudioEnabled) {
+                getAudioContext();
+                playQuindarTone(true);
+                showToast('ok', 'AKUSTIK MONITORING FAOL', 'Biometrik va fazoviy telemetriya signallari ulandi.');
+            } else {
+                showToast('info', "OVOZ O'CHIRILDI", "Telemetriya signallari ovozsiz rejimga o'tkazildi.");
+            }
+        }
+
+        function setCameraMode(mode) {
+            cameraMode = mode;
+            document.getElementById('btnCamOrbital').className = `btn-cam-mode ${mode === 'orbital' ? 'active-cam' : ''}`;
+            document.getElementById('btnCamThermal').className = `btn-cam-mode ${mode === 'thermal' ? 'active-cam' : ''}`;
+            const wm = document.getElementById('canvasCamWatermark');
+            if (wm) {
+                wm.textContent = mode === 'thermal' 
+                    ? 'CAMERA: IR BIO-THERMAL SPECTRUM // 60 FPS // CALIBRATED'
+                    : 'CAMERA: OPTICAL FEED // 60 FPS // HD TELEMETRY';
+            }
+        }
+
         // ========================================================
         // 60FPS GRAPHICS CANVAS FOR SPACE ENVIRONMENTS
         // ========================================================
         function startCanvasAnimation() {
             if (!animFrameId) {
-                renderSimulationCanvas();
+                lastEcgY = 45;
+                ecgX = 0;
+                initEcgMonitor();
+                requestAnimationFrame(animationLoop);
             }
         }
 
@@ -3353,302 +3928,1056 @@ HTML_CONTENT = """<!DOCTYPE html>
             }
         }
 
+        function animationLoop(timestamp) {
+            if (!simPlaybackLastTs) simPlaybackLastTs = timestamp;
+            const deltaSec = Math.min(0.1, (timestamp - simPlaybackLastTs) / 1000.0);
+            simPlaybackLastTs = timestamp;
+
+            simCanvasTime += deltaSec;
+
+            // Handle simulation timeline playback progression
+            if (simPlaybackIsPlaying && currentSimReport && currentSimReport.steps && currentSimReport.steps.length > 0) {
+                const totalDuration = (currentSimReport.steps[currentSimReport.steps.length - 1].minute) || 60;
+                // Scale so that 1x plays full duration in ~35 seconds
+                const advanceRate = (totalDuration / 35.0) * simPlaybackSpeed;
+                simPlaybackCurrentMinute += advanceRate * deltaSec;
+
+                if (simPlaybackCurrentMinute >= totalDuration) {
+                    simPlaybackCurrentMinute = totalDuration;
+                    simPlaybackIsPlaying = false;
+                    updatePlayPauseButtonUI();
+                    showVerdictAtEnd();
+                    playQuindarTone(false);
+                }
+
+                syncSimulationToMinute(simPlaybackCurrentMinute);
+            }
+
+            // Render environmental graphics
+            renderSimulationCanvas();
+
+            // Render ECG Monitor sweep
+            renderEcgFrame(deltaSec);
+
+            animFrameId = requestAnimationFrame(animationLoop);
+        }
+
         function renderSimulationCanvas() {
             const canvas = document.getElementById('simEnvironmentCanvas');
             if (!canvas) return;
 
             const rect = canvas.getBoundingClientRect();
-            if (canvas.width !== rect.width || canvas.height !== rect.height) {
-                canvas.width = rect.width;
-                canvas.height = rect.height;
+            const dpr = window.devicePixelRatio || 1;
+            const targetW = Math.round(rect.width * dpr);
+            const targetH = Math.round(rect.height * dpr);
+
+            if (canvas.width !== targetW || canvas.height !== targetH) {
+                canvas.width = targetW;
+                canvas.height = targetH;
             }
 
             const ctx = canvas.getContext('2d');
-            const w = canvas.width;
-            const h = canvas.height;
-            simCanvasTime += 0.02;
+            ctx.save();
+            ctx.scale(dpr, dpr);
+
+            const w = rect.width;
+            const h = rect.height;
+            const t = simCanvasTime;
 
             ctx.clearRect(0, 0, w, h);
 
             const op = (selectedOpId && opsData[selectedOpId]) ? opsData[selectedOpId] : null;
-            const opLevel = op ? op.level : 3;
+            const opLevel = op ? op.level : 1;
+            const activeStep = getCurrentStepData();
 
+            // Render specific realistic planetary/space environment
             if (opLevel === 5) {
-                drawBlackHoleScene(ctx, w, h, simCanvasTime);
-            } else if (opLevel === 3) {
-                drawMarsCanyonScene(ctx, w, h, simCanvasTime);
+                drawBlackHoleSceneHighFidelity(ctx, w, h, t, activeStep);
             } else if (opLevel === 4) {
-                drawTitanScene(ctx, w, h, simCanvasTime);
-            } else if (opLevel === 1) {
-                drawMoonScene(ctx, w, h, simCanvasTime);
+                drawTitanSceneHighFidelity(ctx, w, h, t, activeStep);
+            } else if (opLevel === 3) {
+                drawMarsCanyonSceneHighFidelity(ctx, w, h, t, activeStep);
+            } else if (opLevel === 2) {
+                drawMarsOrbitSceneHighFidelity(ctx, w, h, t, activeStep);
             } else {
-                drawMarsOrbitScene(ctx, w, h, simCanvasTime);
+                drawMoonSceneHighFidelity(ctx, w, h, t, activeStep);
             }
 
-            animFrameId = requestAnimationFrame(renderSimulationCanvas);
+            // Thermal camera post-processing overlay if enabled
+            if (cameraMode === 'thermal') {
+                drawThermalShaderOverlay(ctx, w, h);
+            }
+
+            // Subtle phosphor scanlines
+            drawPhosphorScanlines(ctx, w, h);
+
+            ctx.restore();
         }
 
-        function drawMarsCanyonScene(ctx, w, h, t) {
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
-            skyGrad.addColorStop(0, '#1c0805');
-            skyGrad.addColorStop(0.5, '#42140e');
-            skyGrad.addColorStop(1, '#631f16');
-            ctx.fillStyle = skyGrad;
+        function getCurrentStepData() {
+            if (!currentSimReport || !currentSimReport.steps || currentSimReport.steps.length === 0) {
+                return {
+                    minute: 0,
+                    hr: 75,
+                    spo2: 98.5,
+                    g_force_effective: 1.0,
+                    suit_pressure_kpa: 29.6,
+                    o2_remaining_pct: 100.0,
+                    status: 'NOMINAL',
+                    event_log: 'Tizim nominal sharoitda.'
+                };
+            }
+            const steps = currentSimReport.steps;
+            for (let i = steps.length - 1; i >= 0; i--) {
+                if (steps[i].minute <= simPlaybackCurrentMinute) {
+                    return steps[i];
+                }
+            }
+            return steps[0];
+        }
+
+        // ----------------------------------------------------
+        // SCENE 1: ARTEMIS LUNAR SOUTH POLE (SHACKLETON CRATER)
+        // ----------------------------------------------------
+        function drawMoonSceneHighFidelity(ctx, w, h, t, step) {
+            // Pitch black vacuum space
+            ctx.fillStyle = '#010204';
             ctx.fillRect(0, 0, w, h);
 
-            ctx.fillStyle = '#ffecd9';
+            // Anti-aliased starfield
+            for (let i = 0; i < 90; i++) {
+                const sx = (i * 137.5) % w;
+                const sy = (i * 73.1) % (h * 0.65);
+                const brightness = ((i * 31) % 10) / 10 * 0.8 + 0.2;
+                ctx.fillStyle = `rgba(255, 255, 255, ${brightness})`;
+                ctx.fillRect(sx, sy, (i % 5 === 0) ? 1.8 : 1.1, (i % 5 === 0) ? 1.8 : 1.1);
+            }
+
+            // Earth floating above lunar horizon with blue atmospheric glow
+            const earthX = w * 0.78;
+            const earthY = h * 0.22;
+            const earthR = 34;
+
+            // Earth atmosphere halo
+            const earthGlow = ctx.createRadialGradient(earthX, earthY, earthR * 0.85, earthX, earthY, earthR * 1.4);
+            earthGlow.addColorStop(0, 'rgba(0, 240, 255, 0.45)');
+            earthGlow.addColorStop(0.5, 'rgba(30, 100, 255, 0.25)');
+            earthGlow.addColorStop(1, 'transparent');
+            ctx.fillStyle = earthGlow;
             ctx.beginPath();
-            ctx.arc(w * 0.75, h * 0.2, 14, 0, Math.PI * 2);
+            ctx.arc(earthX, earthY, earthR * 1.4, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = '#40150f';
+            // Earth disk (crescent sunlit)
+            ctx.save();
             ctx.beginPath();
-            ctx.moveTo(0, h * 0.45);
-            for (let x = 0; x <= w; x += 40) {
-                const y = h * 0.42 + Math.sin(x * 0.005 + 1.2) * 35 + Math.cos(x * 0.015) * 15;
+            ctx.arc(earthX, earthY, earthR, 0, Math.PI * 2);
+            ctx.clip();
+            // Dark ocean base
+            ctx.fillStyle = '#0b1d3a';
+            ctx.fillRect(earthX - earthR, earthY - earthR, earthR * 2, earthR * 2);
+            // Sunlit crescent
+            const sunlitGrad = ctx.createLinearGradient(earthX - earthR * 0.8, earthY, earthX + earthR, earthY);
+            sunlitGrad.addColorStop(0, '#1976d2');
+            sunlitGrad.addColorStop(0.4, '#2e7d32');
+            sunlitGrad.addColorStop(0.7, '#ffffff');
+            sunlitGrad.addColorStop(1, '#050c18');
+            ctx.fillStyle = sunlitGrad;
+            ctx.fillRect(earthX - earthR, earthY - earthR, earthR * 2, earthR * 2);
+            // Clouds
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+            ctx.beginPath();
+            ctx.arc(earthX - 4, earthY - 8, 14, 0, Math.PI * 2);
+            ctx.arc(earthX - 10, earthY + 10, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Low-angle harsh sun on far left horizon
+            const sunX = w * 0.04;
+            const sunY = h * 0.52;
+            const sunGrad = ctx.createRadialGradient(sunX, sunY, 5, sunX, sunY, 180);
+            sunGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+            sunGrad.addColorStop(0.15, 'rgba(255, 245, 220, 0.4)');
+            sunGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = sunGrad;
+            ctx.beginPath();
+            ctx.arc(sunX, sunY, 180, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Distant jagged Shackleton crater peaks (harsh contrast)
+            ctx.fillStyle = '#10141d';
+            ctx.beginPath();
+            ctx.moveTo(0, h * 0.56);
+            for (let x = 0; x <= w; x += 35) {
+                const y = h * 0.53 + Math.sin(x * 0.012 + 0.5) * 22 + Math.cos(x * 0.028) * 12;
                 ctx.lineTo(x, y);
             }
             ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.fill();
 
-            ctx.fillStyle = '#2b0c08';
+            // Foreground regolith crater terrain
+            const terrainGrad = ctx.createLinearGradient(0, h * 0.62, 0, h);
+            terrainGrad.addColorStop(0, '#353c48');
+            terrainGrad.addColorStop(0.4, '#202632');
+            terrainGrad.addColorStop(1, '#11151c');
+            ctx.fillStyle = terrainGrad;
             ctx.beginPath();
-            ctx.moveTo(0, h * 0.1);
-            ctx.lineTo(w * 0.35, h * 0.55);
-            ctx.lineTo(w * 0.3, h * 0.85);
-            ctx.lineTo(0, h); ctx.fill();
+            ctx.moveTo(0, h * 0.62);
+            for (let x = 0; x <= w; x += 25) {
+                const y = h * 0.62 + Math.sin(x * 0.008) * 14 + Math.sin(x * 0.02) * 6;
+                ctx.lineTo(x, y);
+            }
+            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.fill();
 
-            ctx.fillStyle = '#220805';
+            // Deep crater shadow casting from low sun
+            ctx.fillStyle = '#06080d';
             ctx.beginPath();
-            ctx.moveTo(w, h * 0.15);
-            ctx.lineTo(w * 0.65, h * 0.58);
-            ctx.lineTo(w * 0.7, h);
-            ctx.lineTo(w, h); ctx.fill();
+            ctx.ellipse(w * 0.38, h * 0.76, 55, 14, -0.05, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(w * 0.82, h * 0.84, 85, 18, 0.02, 0, Math.PI * 2);
+            ctx.fill();
 
-            // Parallax Dust Particles
-            ctx.fillStyle = 'rgba(230, 110, 80, 0.45)';
-            for (let i = 0; i < 40; i++) {
-                const px = (Math.sin(i * 123 + t * 0.8) * 0.5 + 0.5) * w;
-                const py = (Math.cos(i * 456 + t * 0.4) * 0.5 + 0.5) * h;
-                const sz = (i % 3) + 1.5;
-                ctx.fillRect(px, py, sz, sz);
+            // Artemis Solar Array Tracking Tower (Right side)
+            const mastX = w * 0.72;
+            const mastY = h * 0.62;
+            // Truss mast
+            ctx.strokeStyle = '#8596b0';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(mastX, mastY);
+            ctx.lineTo(mastX, mastY - 110);
+            ctx.stroke();
+            // Solar wings with photovoltaic blue sheen
+            const wingW = 75;
+            const wingH = 42;
+            const wingY = mastY - 100;
+            ctx.fillStyle = '#092147';
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 1.2;
+            ctx.fillRect(mastX - wingW, wingY - wingH / 2, wingW * 2, wingH);
+            ctx.strokeRect(mastX - wingW, wingY - wingH / 2, wingW * 2, wingH);
+            // PV cell grid lines
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
+            for (let gx = -wingW + 15; gx < wingW; gx += 15) {
+                ctx.beginPath();
+                ctx.moveTo(mastX + gx, wingY - wingH / 2);
+                ctx.lineTo(mastX + gx, wingY + wingH / 2);
+                ctx.stroke();
+            }
+            // Specular solar glint
+            if (Math.sin(t * 3) > 0.6) {
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(mastX - 25, wingY - 6, 3, 0, Math.PI * 2);
+                ctx.fill();
             }
 
-            // Descending Astronaut with glowing tether rope
-            const astroX = w * 0.5 + Math.sin(t * 1.5) * 8;
-            const astroY = h * 0.45 + Math.sin(t * 0.8) * 15;
+            // Draw Detailed Astronaut EVA Model (Moon: sweeping dust wand)
+            const astroX = w * 0.44;
+            const astroY = h * 0.71;
+            drawAstronautEMU(ctx, astroX, astroY, 1.0, 'lunar_clean', t, 'moon', step);
 
-            ctx.strokeStyle = '#00f0ff';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(w * 0.35, h * 0.12);
-            ctx.quadraticCurveTo(w * 0.42, h * 0.28, astroX, astroY);
-            ctx.stroke();
-
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(astroX, astroY - 12, 6, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#ffab00';
-            ctx.fillRect(astroX + 1, astroY - 14, 4, 4);
-
-            ctx.fillStyle = '#d0d8e8';
-            ctx.fillRect(astroX - 5, astroY - 6, 10, 14);
-            ctx.fillStyle = '#00f0ff';
-            ctx.fillRect(astroX - 2, astroY - 3, 4, 4);
-
-            // Geological drill sparks
-            if (Math.sin(t * 8) > 0.2) {
-                ctx.fillStyle = '#fffa65';
-                for (let k = 0; k < 6; k++) {
-                    ctx.fillRect(astroX + 10 + Math.random() * 8, astroY + 16 + Math.random() * 8, 2, 2);
-                }
+            // Floating 1/6g lunar dust particles
+            ctx.fillStyle = 'rgba(215, 225, 240, 0.55)';
+            for (let k = 0; k < 25; k++) {
+                const px = (astroX + Math.sin(k * 73 + t * 0.7) * 45);
+                const py = (astroY + 15 + Math.cos(k * 41 + t * 0.9) * 12);
+                ctx.fillRect(px, py, 1.5, 1.5);
             }
         }
 
-        function drawBlackHoleScene(ctx, w, h, t) {
-            ctx.fillStyle = '#020005';
+        // ----------------------------------------------------
+        // SCENE 2: MARS LOW ORBIT ARES-TRANSIT EXTERIOR EVA
+        // ----------------------------------------------------
+        function drawMarsOrbitSceneHighFidelity(ctx, w, h, t, step) {
+            // Dark cosmos
+            ctx.fillStyle = '#010307';
+            ctx.fillRect(0, 0, w, h);
+
+            // Stars
+            for (let i = 0; i < 80; i++) {
+                const sx = (i * 149) % w;
+                const sy = (i * 83) % (h * 0.7);
+                ctx.fillStyle = `rgba(255, 255, 255, ${((i * 17) % 8) / 10 + 0.2})`;
+                ctx.fillRect(sx, sy, 1.2, 1.2);
+            }
+
+            // Massive Curved Mars Globe below
+            const cx = w * 0.45;
+            const cy = h * 1.55;
+            const r = w * 0.88;
+
+            // Mars Atmospheric Glow Limb (Rayleigh scattering)
+            const atmoGlow = ctx.createRadialGradient(cx, cy, r * 0.96, cx, cy, r * 1.04);
+            atmoGlow.addColorStop(0, 'rgba(220, 90, 40, 0.7)');
+            atmoGlow.addColorStop(0.4, 'rgba(100, 160, 255, 0.35)');
+            atmoGlow.addColorStop(1, 'transparent');
+            ctx.fillStyle = atmoGlow;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * 1.05, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Mars Globe Body
+            const marsGrad = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.6, 20, cx, cy, r);
+            marsGrad.addColorStop(0, '#c34e23');
+            marsGrad.addColorStop(0.45, '#993510');
+            marsGrad.addColorStop(0.85, '#4b1505');
+            marsGrad.addColorStop(1, '#0e0200');
+            ctx.fillStyle = marsGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Topographical scars on Mars surface (Valles Marineris visible from orbit)
+            ctx.strokeStyle = 'rgba(60, 15, 5, 0.45)';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(w * 0.25, h * 0.78);
+            ctx.bezierCurveTo(w * 0.42, h * 0.74, w * 0.58, h * 0.82, w * 0.75, h * 0.80);
+            ctx.stroke();
+
+            // Ares-Transit Space Station Truss & Ion Propulsion Bell (Left Side)
+            const trussX = w * 0.18;
+            const trussY = h * 0.32;
+
+            // Station Hab Module
+            ctx.fillStyle = '#b0c2de';
+            ctx.strokeStyle = '#5a759e';
+            ctx.lineWidth = 2;
+            ctx.fillRect(trussX - 35, trussY - 25, 70, 50);
+            ctx.strokeRect(trussX - 35, trussY - 25, 70, 50);
+
+            // Truss frame extending right
+            ctx.strokeStyle = '#7c92b3';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(trussX + 35, trussY);
+            ctx.lineTo(w * 0.48, trussY);
+            ctx.stroke();
+
+            // Xenon Ion Thruster Bell
+            const thrusterX = w * 0.48;
+            const thrusterY = trussY;
+            ctx.fillStyle = '#3a4454';
+            ctx.beginPath();
+            ctx.moveTo(thrusterX, thrusterY - 18);
+            ctx.lineTo(thrusterX + 28, thrusterY - 28);
+            ctx.lineTo(thrusterX + 28, thrusterY + 28);
+            ctx.lineTo(thrusterX, thrusterY + 18);
+            ctx.closePath();
+            ctx.fill();
+
+            // Xenon Plasma Glow (Electric violet/cyan core)
+            const plasmaGrad = ctx.createRadialGradient(thrusterX + 28, thrusterY, 2, thrusterX + 60, thrusterY, 35);
+            plasmaGrad.addColorStop(0, '#ffffff');
+            plasmaGrad.addColorStop(0.25, '#00f0ff');
+            plasmaGrad.addColorStop(0.65, '#9d00ff');
+            plasmaGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = plasmaGrad;
+            ctx.beginPath();
+            ctx.arc(thrusterX + 38, thrusterY, 35, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Safety Tether line connecting astronaut to station airlock
+            const astroX = w * 0.62 + Math.sin(t * 1.2) * 6;
+            const astroY = h * 0.44 + Math.cos(t * 0.9) * 8;
+
+            ctx.strokeStyle = '#ffd700';
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.moveTo(trussX + 35, trussY + 12);
+            ctx.bezierCurveTo(w * 0.38, h * 0.48, w * 0.50, h * 0.52, astroX - 10, astroY);
+            ctx.stroke();
+
+            // Draw Microgravity Floating Astronaut with PGT torque wrench tool
+            drawAstronautEMU(ctx, astroX, astroY, 1.0, 'microgravity_torque', t, 'orbit', step);
+
+            // Cold-Gas RCS Thruster stabilization puffs from backpack
+            if (Math.sin(t * 4) > 0.4) {
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(astroX - 22, astroY - 14, 5 + Math.random() * 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // ----------------------------------------------------
+        // SCENE 3: MARS VALLES MARINERIS CANYON DESCENT & DRILL
+        // ----------------------------------------------------
+        function drawMarsCanyonSceneHighFidelity(ctx, w, h, t, step) {
+            // Dusky red-salmon Martian atmospheric sky
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+            skyGrad.addColorStop(0, '#150604');
+            skyGrad.addColorStop(0.4, '#38120b');
+            skyGrad.addColorStop(0.85, '#5c1e13');
+            skyGrad.addColorStop(1, '#782819');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Small pale blue sun (Martian sunset blue forward scattering)
+            const sunX = w * 0.72;
+            const sunY = h * 0.18;
+            const sunHalo = ctx.createRadialGradient(sunX, sunY, 3, sunX, sunY, 35);
+            sunHalo.addColorStop(0, '#ffffff');
+            sunHalo.addColorStop(0.3, 'rgba(120, 180, 255, 0.5)');
+            sunHalo.addColorStop(1, 'transparent');
+            ctx.fillStyle = sunHalo;
+            ctx.beginPath();
+            ctx.arc(sunX, sunY, 35, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 4.2 km Vertical Canyon Cliffs with Distinct Geological Strata
+            // Left towering cliff
+            ctx.fillStyle = '#260c07';
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(w * 0.38, 0);
+            ctx.lineTo(w * 0.32, h * 0.45);
+            ctx.lineTo(w * 0.28, h);
+            ctx.lineTo(0, h);
+            ctx.closePath();
+            ctx.fill();
+
+            // Geological strata bands on cliff face
+            const strataColors = ['#40160d', '#180704', '#662215', '#2a0e08', '#8a3320', '#1f0905'];
+            for (let s = 0; s < 12; s++) {
+                const sy = s * (h / 12);
+                ctx.fillStyle = strataColors[s % strataColors.length];
+                ctx.beginPath();
+                ctx.moveTo(0, sy);
+                ctx.lineTo(w * 0.34 - s * 2, sy + 8);
+                ctx.lineTo(w * 0.34 - s * 2, sy + 18);
+                ctx.lineTo(0, sy + 14);
+                ctx.fill();
+            }
+
+            // Right distant canyon wall
+            ctx.fillStyle = '#1e0906';
+            ctx.beginPath();
+            ctx.moveTo(w, h * 0.1);
+            ctx.lineTo(w * 0.62, h * 0.48);
+            ctx.lineTo(w * 0.68, h);
+            ctx.lineTo(w, h);
+            ctx.closePath();
+            ctx.fill();
+
+            // Atmospheric red particulate dust haze
+            ctx.fillStyle = 'rgba(210, 85, 45, 0.15)';
+            ctx.fillRect(0, h * 0.4, w, h * 0.6);
+
+            // Rappelling titanium winch at top cliff edge
+            const winchX = w * 0.34;
+            const winchY = h * 0.08;
+            ctx.fillStyle = '#7a8ba3';
+            ctx.fillRect(winchX - 8, winchY - 6, 16, 12);
+
+            // Braided high-tensile steel rappel cable
+            const astroX = w * 0.48 + Math.sin(t * 1.6) * 4;
+            const astroY = h * 0.48 + Math.sin(t * 0.8) * 6;
+
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.moveTo(winchX, winchY);
+            ctx.lineTo(astroX - 4, astroY - 14);
+            ctx.stroke();
+
+            // Draw Astronaut operating heavy pneumatic core drill into rock wall
+            drawAstronautEMU(ctx, astroX, astroY, 1.0, 'canyon_drill', t, 'mars', step);
+
+            // Geological drilling sparks & ejected fine regolith dust clouds
+            if (Math.sin(t * 8) > 0.1) {
+                // Sparks
+                ctx.fillStyle = '#ffe066';
+                for (let sp = 0; sp < 8; sp++) {
+                    ctx.fillRect(astroX + 16 + Math.random() * 12, astroY + 12 + Math.random() * 10, 2, 2);
+                }
+                // Dust clouds
+                ctx.fillStyle = 'rgba(220, 100, 60, 0.4)';
+                ctx.beginPath();
+                ctx.arc(astroX + 22, astroY + 16, 8 + Math.random() * 6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // ----------------------------------------------------
+        // SCENE 4: TITAN KRAKEN MARE CRYOGENIC METHANE STORM
+        // ----------------------------------------------------
+        function drawTitanSceneHighFidelity(ctx, w, h, t, step) {
+            // Dense, murky photochemical orange/amber nitrogen atmosphere
+            const haze = ctx.createLinearGradient(0, 0, 0, h);
+            haze.addColorStop(0, '#2b1904');
+            haze.addColorStop(0.45, '#5c370b');
+            haze.addColorStop(0.8, '#855010');
+            haze.addColorStop(1, '#241503');
+            ctx.fillStyle = haze;
+            ctx.fillRect(0, 0, w, h);
+
+            // Kraken Mare liquid methane sea
+            const seaY = h * 0.64;
+            const seaGrad = ctx.createLinearGradient(0, seaY, 0, h);
+            seaGrad.addColorStop(0, '#0a1622');
+            seaGrad.addColorStop(0.5, '#060f17');
+            seaGrad.addColorStop(1, '#020508');
+            ctx.fillStyle = seaGrad;
+            ctx.fillRect(0, seaY, w, h - seaY);
+
+            // Liquid methane waves with specular oily sheen
+            ctx.strokeStyle = 'rgba(100, 200, 235, 0.45)';
+            ctx.lineWidth = 1.6;
+            for (let wv = 0; wv < 4; wv++) {
+                const wy = seaY + 12 + wv * 18;
+                ctx.beginPath();
+                ctx.moveTo(0, wy);
+                for (let x = 0; x <= w; x += 30) {
+                    const yOffset = Math.sin(x * 0.02 + t * 4 + wv) * 4;
+                    ctx.lineTo(x, wy + yOffset);
+                }
+                ctx.stroke();
+            }
+
+            // Shoreline water-ice bedrock cliffs (granite-like rock at -179°C)
+            ctx.fillStyle = '#17222d';
+            ctx.beginPath();
+            ctx.moveTo(0, h * 0.58);
+            ctx.lineTo(w * 0.42, h * 0.63);
+            ctx.lineTo(w * 0.38, h);
+            ctx.lineTo(0, h);
+            ctx.fill();
+
+            // Frozen cyan methane frost veins on the rock
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(w * 0.12, h * 0.60);
+            ctx.lineTo(w * 0.28, h * 0.68);
+            ctx.lineTo(w * 0.22, h * 0.85);
+            ctx.stroke();
+
+            // 35 m/s Gale-force cryogenic methane rain streaks
+            ctx.strokeStyle = 'rgba(160, 220, 240, 0.35)';
+            ctx.lineWidth = 1.2;
+            for (let rn = 0; rn < 55; rn++) {
+                const rx = ((rn * 37 + t * 550) % (w + 120)) - 60;
+                const ry = (rn * 23 + t * 400) % h;
+                ctx.beginPath();
+                ctx.moveTo(rx, ry);
+                ctx.lineTo(rx - 32, ry + 22);
+                ctx.stroke();
+            }
+
+            // Draw Astronaut bracing against 35 m/s storm with cryogenic sampler
+            const astroX = w * 0.36;
+            const astroY = h * 0.62;
+            drawAstronautEMU(ctx, astroX, astroY, 1.0, 'cryo_storm', t, 'titan', step);
+
+            // Isobaric sampler venting white cryo-steam puffs
+            if (Math.sin(t * 5) > 0.2) {
+                ctx.fillStyle = 'rgba(235, 245, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(astroX + 24, astroY + 12, 6 + Math.random() * 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // ----------------------------------------------------
+        // SCENE 5: CYGNUS X-1 BLACK HOLE EVENT HORIZON & ERGOSPHERE
+        // ----------------------------------------------------
+        function drawBlackHoleSceneHighFidelity(ctx, w, h, t, step) {
+            // Abyss space
+            ctx.fillStyle = '#010003';
             ctx.fillRect(0, 0, w, h);
 
             const cx = w * 0.5;
             const cy = h * 0.5;
 
-            ctx.fillStyle = '#ffffff';
-            for (let i = 0; i < 60; i++) {
-                const angle = i * 13.5 + t * 0.05;
-                const dist = 90 + ((i * 17) % 180);
-                const sx = cx + Math.cos(angle) * dist * 1.6;
-                const sy = cy + Math.sin(angle) * dist;
-                ctx.fillRect(sx, sy, 1.5, 1.5);
+            // Spacetime coordinate distortion grid warping into singularity
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
+            ctx.lineWidth = 1;
+            for (let ring = 40; ring < 260; ring += 25) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, ring, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
+                ctx.beginPath();
+                ctx.moveTo(cx + Math.cos(a + t * 0.1) * 45, cy + Math.sin(a + t * 0.1) * 45);
+                ctx.lineTo(cx + Math.cos(a + t * 0.05) * 280, cy + Math.sin(a + t * 0.05) * 280);
+                ctx.stroke();
             }
 
+            // Gravitationally Lensed Relativistic Accretion Disk
+            // Upper and lower lensed arcs (General relativity light bending)
             ctx.save();
             ctx.translate(cx, cy);
-            ctx.scale(1, 0.32);
 
-            const radGrad = ctx.createRadialGradient(0, 0, 40, 0, 0, 200);
-            radGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
-            radGrad.addColorStop(0.15, 'rgba(0, 240, 255, 0.85)');
-            radGrad.addColorStop(0.35, 'rgba(255, 100, 20, 0.8)');
-            radGrad.addColorStop(0.7, 'rgba(255, 23, 68, 0.4)');
-            radGrad.addColorStop(1, 'transparent');
+            // Relativistic Doppler Beaming: Left side bright/cyan (approaching), Right side dim/red (receding)
+            const diskGrad = ctx.createLinearGradient(-190, 0, 190, 0);
+            diskGrad.addColorStop(0, 'rgba(0, 240, 255, 0.95)');   // Blueshifted
+            diskGrad.addColorStop(0.25, 'rgba(255, 255, 255, 0.9)');
+            diskGrad.addColorStop(0.55, 'rgba(255, 140, 20, 0.85)');
+            diskGrad.addColorStop(1, 'rgba(180, 20, 30, 0.45)');   // Redshifted
 
-            ctx.fillStyle = radGrad;
+            // Outer accretion disk ellipse
+            ctx.save();
+            ctx.scale(1, 0.28);
+            ctx.fillStyle = diskGrad;
             ctx.beginPath();
-            ctx.arc(0, 0, 210, 0, Math.PI * 2);
+            ctx.arc(0, 0, 195, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
 
+            // Upper lensed halo arc
+            ctx.save();
+            ctx.scale(0.85, 0.65);
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.75)';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.arc(0, 0, 72, Math.PI, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            // Central Pure Pitch Black Event Horizon Shadow
             ctx.fillStyle = '#000000';
             ctx.beginPath();
-            ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+            ctx.arc(0, 0, 52, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.strokeStyle = '#00f0ff';
-            ctx.lineWidth = 2.5;
+            // Blazing Thin Photon Sphere Ring
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2.4;
             ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 15;
+            ctx.shadowBlur = 18;
             ctx.beginPath();
-            ctx.arc(cx, cy, 50, 0, Math.PI * 2);
+            ctx.arc(0, 0, 53, 0, Math.PI * 2);
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // Spaghettified stretched silhouette
-            const astX = cx + Math.cos(t * 1.8) * 90;
-            const astY = cy + Math.sin(t * 1.8) * 28;
+            ctx.restore();
 
-            ctx.strokeStyle = '#ff1744';
-            ctx.lineWidth = 2;
+            // Relativistic Spaghettification & Quantum Probe Array
+            const astroX = cx + Math.cos(t * 1.5) * 115;
+            const astroY = cy + Math.sin(t * 1.5) * 32;
+
+            const isFatal = (step && (step.status === 'FATAL' || step.status === 'CRITICAL_FAILURE'));
+            drawAstronautEMU(ctx, astroX, astroY, 0.9, isFatal ? 'spaghettify' : 'quantum_probe', t, 'blackhole', step);
+
+            // Gravitational Tidal Stress Lines (Spaghettification shear vectors)
+            ctx.strokeStyle = isFatal ? 'rgba(255, 23, 68, 0.8)' : 'rgba(0, 240, 255, 0.5)';
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.moveTo(astX, astY - 24);
-            ctx.lineTo(astX, astY + 28);
+            ctx.moveTo(astroX, astroY - 35);
+            ctx.lineTo(astroX, astroY + 35);
             ctx.stroke();
 
-            ctx.fillStyle = '#ff1744';
-            ctx.beginPath();
-            ctx.arc(astX, astY - 26, 4, 0, Math.PI * 2);
-            ctx.fill();
-
-            if (Math.sin(t * 6) > 0.3) {
-                ctx.fillStyle = 'rgba(255, 23, 68, 0.12)';
+            // Event Horizon Alert Banner
+            if (isFatal || Math.sin(t * 5) > 0.3) {
+                ctx.fillStyle = 'rgba(255, 23, 68, 0.15)';
                 ctx.fillRect(0, 0, w, h);
-                ctx.font = '700 13px JetBrains Mono';
+                ctx.font = '700 12px JetBrains Mono';
                 ctx.fillStyle = '#ff1744';
-                ctx.fillText('CRITICAL TIDAL GRADIENT: 2850g // EVENT HORIZON BREACH', w * 0.25, 36);
+                ctx.fillText('CRITICAL TIDAL GRADIENT: 2850g // EVENT HORIZON BREACH', w * 0.22, 38);
             }
         }
 
-        function drawTitanScene(ctx, w, h, t) {
-            const haze = ctx.createLinearGradient(0, 0, 0, h);
-            haze.addColorStop(0, '#2b1a06');
-            haze.addColorStop(0.6, '#4f310e');
-            haze.addColorStop(1, '#1a1005');
-            ctx.fillStyle = haze;
-            ctx.fillRect(0, 0, w, h);
+        // ----------------------------------------------------
+        // VECTOR EMU EXTRAVEHICULAR MOBILITY UNIT SPACESUIT MODEL
+        // ----------------------------------------------------
+        function drawAstronautEMU(ctx, x, y, scale, action, t, visorReflect, step) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
 
-            ctx.fillStyle = '#0a1014';
-            ctx.fillRect(0, h * 0.65, w, h * 0.35);
+            const isFatal = (action === 'spaghettify');
+            const yStretch = isFatal ? (1.0 + Math.sin(t * 10) * 0.4) : 1.0;
+            ctx.scale(1.0, yStretch);
 
-            ctx.strokeStyle = 'rgba(120, 200, 220, 0.4)';
-            ctx.lineWidth = 1.2;
-            for (let i = 0; i < 45; i++) {
-                const rx = ((i * 37 + t * 400) % (w + 100)) - 50;
-                const ry = (i * 29 + t * 500) % h;
+            // 1. PLSS Life Support Backpack
+            ctx.fillStyle = '#dde5f2';
+            ctx.strokeStyle = '#8ca0bf';
+            ctx.lineWidth = 1.5;
+            ctx.fillRect(-18, -26, 12, 36);
+            ctx.strokeRect(-18, -26, 12, 36);
+
+            // Sublimator exhaust vent with cryogenic vapor puff
+            const puffAlpha = 0.4 + Math.sin(t * 6) * 0.3;
+            ctx.fillStyle = `rgba(220, 240, 255, ${puffAlpha})`;
+            ctx.beginPath();
+            ctx.arc(-22, -24, 4 + Math.random() * 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 2. Spacesuit Torso & Multi-Layer Insulation (MLI)
+            const torsoGrad = ctx.createLinearGradient(-10, -22, 14, 10);
+            torsoGrad.addColorStop(0, '#ffffff');
+            torsoGrad.addColorStop(0.6, '#d5deed');
+            torsoGrad.addColorStop(1, '#97a8c3');
+            ctx.fillStyle = torsoGrad;
+            ctx.beginPath();
+            ctx.roundRect(-10, -20, 22, 28, 5);
+            ctx.fill();
+            ctx.strokeStyle = '#7c90b0';
+            ctx.stroke();
+
+            // Chest Display & Control Module (DCM)
+            ctx.fillStyle = '#1a2332';
+            ctx.fillRect(-5, -14, 12, 12);
+            ctx.fillStyle = (step && step.hr > 160) ? '#ff1744' : '#00e676';
+            ctx.fillRect(-3, -12, 3, 3);
+            ctx.fillStyle = '#00f0ff';
+            ctx.fillRect(1, -12, 4, 3);
+
+            // 3. Articulated Legs & Boots
+            const legLeftAngle = (action === 'lunar_clean') ? Math.sin(t * 3) * 0.15 : 0.05;
+            const legRightAngle = (action === 'lunar_clean') ? -Math.sin(t * 3) * 0.15 : -0.05;
+
+            // Left leg
+            ctx.save();
+            ctx.translate(-5, 8);
+            ctx.rotate(legLeftAngle);
+            ctx.fillStyle = '#cfd9e8';
+            ctx.fillRect(-4, 0, 8, 18);
+            // Sizing joint rings
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-4, 8, 8, 2);
+            // Boot
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(-5, 18, 11, 6);
+            ctx.restore();
+
+            // Right leg
+            ctx.save();
+            ctx.translate(6, 8);
+            ctx.rotate(legRightAngle);
+            ctx.fillStyle = '#c0ccdc';
+            ctx.fillRect(-4, 0, 8, 18);
+            ctx.strokeStyle = '#fc3d21'; // Anodized red sizing ring
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-4, 8, 8, 2);
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(-3, 18, 11, 6);
+            ctx.restore();
+
+            // 4. Arms & Mission Tools
+            if (action === 'lunar_clean') {
+                // Extended arm holding electrostatic wand
+                ctx.strokeStyle = '#d5deed';
+                ctx.lineWidth = 6;
+                ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(rx, ry);
-                ctx.lineTo(rx - 25, ry + 35);
+                ctx.moveTo(8, -12);
+                ctx.lineTo(24, -4);
+                ctx.stroke();
+                // Wand
+                ctx.strokeStyle = '#00f0ff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(24, -4);
+                ctx.lineTo(40, 2);
+                ctx.stroke();
+                // Electrostatic pulse rings
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(40, 2, 8 + (t * 20 % 16), -Math.PI / 3, Math.PI / 3);
+                ctx.stroke();
+            } else if (action === 'canyon_drill') {
+                // Two-handed grip on heavy core drill
+                ctx.strokeStyle = '#d5deed';
+                ctx.lineWidth = 6;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(4, -12);
+                ctx.lineTo(16, 2);
+                ctx.stroke();
+                // Drill rig chassis
+                ctx.fillStyle = '#ffab00';
+                ctx.fillRect(16, -4, 18, 14);
+                // Rotating core bit
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(34, 3);
+                ctx.lineTo(44, 3);
+                ctx.stroke();
+                // Red laser alignment beam
+                ctx.strokeStyle = 'rgba(255, 23, 68, 0.8)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(34, 1);
+                ctx.lineTo(65, 1);
+                ctx.stroke();
+            } else if (action === 'cryo_storm') {
+                // Isobaric cryo sampler tube
+                ctx.strokeStyle = '#d5deed';
+                ctx.lineWidth = 6;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(4, -12);
+                ctx.lineTo(18, 6);
+                ctx.stroke();
+                ctx.strokeStyle = '#00f0ff';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(18, 6);
+                ctx.lineTo(28, 22);
+                ctx.stroke();
+            } else if (action === 'microgravity_torque') {
+                // PGT Tool with green target laser
+                ctx.strokeStyle = '#d5deed';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.moveTo(4, -12);
+                ctx.lineTo(20, -10);
+                ctx.stroke();
+                ctx.fillStyle = '#ffd700';
+                ctx.fillRect(20, -14, 12, 8);
+                ctx.strokeStyle = '#00e676';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(32, -10);
+                ctx.lineTo(65, -10);
+                ctx.stroke();
+            } else if (action === 'quantum_probe') {
+                // Deployable quantum probe array
+                ctx.strokeStyle = '#d5deed';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.moveTo(4, -12);
+                ctx.lineTo(20, -8);
+                ctx.stroke();
+                ctx.strokeStyle = '#00f0ff';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(20, -18, 20, 20);
+                ctx.beginPath();
+                ctx.moveTo(30, -8);
+                ctx.lineTo(55, -25);
+                ctx.lineTo(55, 10);
+                ctx.closePath();
                 ctx.stroke();
             }
-        }
 
-        function drawMoonScene(ctx, w, h, t) {
-            ctx.fillStyle = '#020307';
-            ctx.fillRect(0, 0, w, h);
-
-            ctx.fillStyle = '#ffffff';
-            for (let i = 0; i < 70; i++) {
-                const sx = (i * 97) % w;
-                const sy = (i * 53) % (h * 0.6);
-                ctx.fillRect(sx, sy, 1.2, 1.2);
-            }
-
-            ctx.fillStyle = '#1e88e5';
+            // 5. Helmet & Gold Extravehicular Visor Assembly (EVVA)
+            const helmetGrad = ctx.createRadialGradient(2, -32, 2, 2, -32, 14);
+            helmetGrad.addColorStop(0, '#ffffff');
+            helmetGrad.addColorStop(0.7, '#d8e2f0');
+            helmetGrad.addColorStop(1, '#8ea1bd');
+            ctx.fillStyle = helmetGrad;
             ctx.beginPath();
-            ctx.arc(w * 0.8, h * 0.25, 22, 0, Math.PI * 2);
+            ctx.arc(2, -30, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#7c90b0';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Parabolic Gold-Coated Visor with Environmental Horizon Reflection
+            const visorGrad = ctx.createLinearGradient(-3, -35, 12, -26);
+            visorGrad.addColorStop(0, '#ffe57f');
+            visorGrad.addColorStop(0.35, '#ffb300');
+            visorGrad.addColorStop(0.7, '#ff6f00');
+            visorGrad.addColorStop(1, '#3e2723');
+            ctx.fillStyle = visorGrad;
+            ctx.beginPath();
+            ctx.ellipse(4, -30, 8, 7, 0.1, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = '#555b66';
+            // Environmental reflection silhouette inside visor
+            ctx.save();
             ctx.beginPath();
-            ctx.moveTo(0, h * 0.65);
-            for (let x = 0; x <= w; x += 30) {
-                ctx.lineTo(x, h * 0.65 + Math.sin(x * 0.01) * 20 + Math.cos(x * 0.03) * 8);
+            ctx.ellipse(4, -30, 8, 7, 0.1, 0, Math.PI * 2);
+            ctx.clip();
+            if (visorReflect === 'moon') {
+                // Reflects blue Earth
+                ctx.fillStyle = '#00f0ff';
+                ctx.beginPath();
+                ctx.arc(6, -32, 3, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (visorReflect === 'mars') {
+                // Reflects red canyon cliffs
+                ctx.fillStyle = '#ff3d00';
+                ctx.fillRect(0, -30, 12, 8);
+            } else if (visorReflect === 'blackhole') {
+                // Reflects photon ring
+                ctx.strokeStyle = '#00f0ff';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.arc(4, -30, 4, 0, Math.PI * 2);
+                ctx.stroke();
             }
-            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.fill();
-        }
-
-        function drawMarsOrbitScene(ctx, w, h, t) {
-            ctx.fillStyle = '#03050a';
-            ctx.fillRect(0, 0, w, h);
-
-            const cx = w * 0.5;
-            const cy = h * 1.3;
-            const r = w * 0.8;
-
-            const marsGrad = ctx.createRadialGradient(cx, cy - r * 0.8, 10, cx, cy, r);
-            marsGrad.addColorStop(0, '#c1440e');
-            marsGrad.addColorStop(0.7, '#6b2005');
-            marsGrad.addColorStop(1, '#110300');
-
-            ctx.fillStyle = marsGrad;
+            // Specular glass highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
             ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.ellipse(2, -33, 4, 2, -0.4, 0, Math.PI * 2);
             ctx.fill();
+            ctx.restore();
+
+            // Dual Helmet Floodlights Casting Volumetric Beams
+            ctx.fillStyle = 'rgba(255, 250, 220, 0.12)';
+            ctx.beginPath();
+            ctx.moveTo(10, -32);
+            ctx.lineTo(110, -55);
+            ctx.lineTo(110, -5);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
         }
 
-        // ==========================================
-        // CIRCULAR ARC GAUGES (CANVAS 2D API)
-        // ==========================================
-        function drawGauge(canvasId, value, min, max, color, unit) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const w = canvas.width;
-            const h = canvas.height;
-            const cx = w / 2;
+        // Phosphor scanline post-processing
+        function drawPhosphorScanlines(ctx, w, h) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+            for (let y = 0; y < h; y += 4) {
+                ctx.fillRect(0, y, w, 1);
+            }
+        }
+
+        // Bio-Thermal false-color shader simulation
+        function drawThermalShaderOverlay(ctx, w, h) {
+            ctx.save();
+            ctx.globalCompositeOperation = 'color';
+            const thermGrad = ctx.createLinearGradient(0, 0, w, h);
+            thermGrad.addColorStop(0, '#0011ff');
+            thermGrad.addColorStop(0.4, '#00ffcc');
+            thermGrad.addColorStop(0.7, '#ffcc00');
+            thermGrad.addColorStop(1, '#ff0033');
+            ctx.fillStyle = thermGrad;
+            ctx.fillRect(0, 0, w, h);
+            ctx.restore();
+        }
+
+        // ========================================================
+        // REAL-TIME CLINICAL ECG OSCILLOSCOPE MONITOR
+        // ========================================================
+        function initEcgMonitor() {
+            ecgCanvas = document.getElementById('canvasECG');
+            if (!ecgCanvas) return;
+            ecgCtx = ecgCanvas.getContext('2d');
+            const w = ecgCanvas.width;
+            const h = ecgCanvas.height;
+
+            // Draw initial oscilloscope background grid
+            ecgCtx.fillStyle = '#02060b';
+            ecgCtx.fillRect(0, 0, w, h);
+
+            ecgCtx.strokeStyle = 'rgba(0, 230, 118, 0.12)';
+            ecgCtx.lineWidth = 1;
+            for (let x = 0; x < w; x += 15) {
+                ecgCtx.beginPath(); ecgCtx.moveTo(x, 0); ecgCtx.lineTo(x, h); ecgCtx.stroke();
+            }
+            for (let y = 0; y < h; y += 15) {
+                ecgCtx.beginPath(); ecgCtx.moveTo(0, y); ecgCtx.lineTo(w, y); ecgCtx.stroke();
+            }
+            lastEcgY = h / 2;
+        }
+
+        function renderEcgFrame(deltaSec) {
+            if (!ecgCtx || !ecgCanvas) return;
+            const w = ecgCanvas.width;
+            const h = ecgCanvas.height;
             const cy = h / 2;
-            const r = 42;
 
-            ctx.clearRect(0, 0, w, h);
+            const sweepSpeed = 85.0; // pixels per second
+            const dx = sweepSpeed * deltaSec;
 
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, Math.PI * 0.75, Math.PI * 2.25);
-            ctx.strokeStyle = '#101827';
-            ctx.lineWidth = 8;
-            ctx.lineCap = 'round';
-            ctx.stroke();
+            const isFatal = (currentSimReport && currentSimReport.verdict === 'FATAL_FAILURE' && simPlaybackCurrentMinute >= (currentSimReport.time_of_failure_min || 2.0));
+            const bpm = isFatal ? 0 : Math.max(30, ecgCurrentBpm);
 
-            const frac = Math.max(0, Math.min(1, (value - min) / (max - min)));
-            const endAngle = Math.PI * 0.75 + frac * (Math.PI * 1.5);
+            // Cardiac cycle duration in seconds
+            const cycleDuration = isFatal ? 999 : (60.0 / bpm);
+            ecgPhase = (ecgPhase + deltaSec / cycleDuration) % 1.0;
 
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, Math.PI * 0.75, endAngle);
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 8;
-            ctx.lineCap = 'round';
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 8;
-            ctx.stroke();
-            ctx.shadowBlur = 0;
+            // Clinical P-Q-R-S-T voltage waveform calculation
+            let targetY = cy;
+            if (!isFatal) {
+                const p = ecgPhase;
+                if (p > 0.08 && p < 0.16) {
+                    // P wave (atrial depolarization)
+                    targetY = cy - Math.sin((p - 0.08) / 0.08 * Math.PI) * 7;
+                } else if (p > 0.19 && p < 0.22) {
+                    // Q wave (septal deflection)
+                    targetY = cy + 5;
+                } else if (p >= 0.22 && p < 0.26) {
+                    // R wave (ventricular spike)
+                    targetY = cy - 38;
+                    // Trigger synchronized biometric heartbeat beep at R-wave
+                    const now = Date.now();
+                    if (now - lastHeartBeatTime > 400) {
+                        playBiometricBeep(bpm, bpm > 165);
+                        lastHeartBeatTime = now;
+                    }
+                } else if (p >= 0.26 && p < 0.30) {
+                    // S wave
+                    targetY = cy + 12;
+                } else if (p > 0.38 && p < 0.52) {
+                    // T wave (ventricular repolarization)
+                    targetY = cy - Math.sin((p - 0.38) / 0.14 * Math.PI) * 11;
+                } else {
+                    // Isoelectric baseline with subtle micro-noise
+                    targetY = cy + (Math.random() - 0.5) * 1.5;
+                }
+            } else {
+                // Flatline in fatal scenario
+                targetY = cy + (Math.random() - 0.5) * 0.8;
+            }
+
+            const nextX = (ecgX + dx) % w;
+
+            // Clear cursor band ahead of sweep
+            ecgCtx.fillStyle = '#02060b';
+            ecgCtx.fillRect(nextX, 0, 18, h);
+
+            // Redraw faint grid in the cleared band
+            ecgCtx.strokeStyle = 'rgba(0, 230, 118, 0.12)';
+            ecgCtx.lineWidth = 1;
+            const startGridX = Math.floor(nextX / 15) * 15;
+            for (let gx = startGridX; gx <= nextX + 18; gx += 15) {
+                ecgCtx.beginPath(); ecgCtx.moveTo(gx, 0); ecgCtx.lineTo(gx, h); ecgCtx.stroke();
+            }
+
+            // Draw glowing phosphor ECG trace
+            const traceColor = isFatal ? '#ff1744' : ((bpm > 160) ? '#ffab00' : '#00e676');
+            ecgCtx.strokeStyle = traceColor;
+            ecgCtx.lineWidth = 2.2;
+            ecgCtx.shadowColor = traceColor;
+            ecgCtx.shadowBlur = 6;
+
+            if (nextX > ecgX) {
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(ecgX, lastEcgY);
+                ecgCtx.lineTo(nextX, targetY);
+                ecgCtx.stroke();
+            }
+            ecgCtx.shadowBlur = 0;
+
+            ecgX = nextX;
+            lastEcgY = targetY;
+
+            // Update ECG status readout
+            const beatLbl = document.getElementById('ecgBeatRate');
+            const rhythmTag = document.getElementById('ecgRhythmTag');
+            if (beatLbl) beatLbl.textContent = `PULSE: ${isFatal ? '0 (ASYSTOLE)' : Math.round(bpm) + ' BPM'}`;
+            if (rhythmTag) {
+                if (isFatal) {
+                    rhythmTag.textContent = 'RITM: ASYSTOLE // FLATLINE';
+                    rhythmTag.style.color = 'var(--red)';
+                } else if (bpm > 160) {
+                    rhythmTag.textContent = 'RITM: SINUS TACHYCARDIA';
+                    rhythmTag.style.color = 'var(--amber)';
+                } else {
+                    rhythmTag.textContent = 'RITM: REGULAR SINUS';
+                    rhythmTag.style.color = 'var(--green)';
+                }
+            }
         }
 
-        // ==========================================
-        // EXECUTE DIGITAL TWIN SIMULATION
-        // ==========================================
+        // ========================================================
+        // EXECUTE & PLAYBACK CONTROL ENGINE
+        // ========================================================
         async function executeDigitalTwinSimulation() {
             if (!selectedAstroId || !selectedOpId || isSimulating) return;
 
             const btn = document.getElementById('btnRunSim');
             btn.disabled = true;
-            btn.innerHTML = `<span>⏳ SIMULYATSIYA HISOBLANMOQDA...</span>`;
+            btn.innerHTML = `<span>⏳ HISOB-KITOBLAR BAJARILMOQDA...</span>`;
             isSimulating = true;
 
             try {
@@ -3662,7 +4991,10 @@ HTML_CONTENT = """<!DOCTYPE html>
                 });
 
                 const data = await res.json();
-                renderSimulationReport(data);
+                currentSimReport = data;
+
+                // Setup simulation playback timeline
+                initSimulationPlayback(data);
 
             } catch (err) {
                 console.error("Simulation error:", err);
@@ -3674,36 +5006,255 @@ HTML_CONTENT = """<!DOCTYPE html>
             }
         }
 
-        function renderSimulationReport(report) {
-            const peakHR = report.peak_hr || report.peak_heart_rate || 75;
-            const minSpO2 = (report.min_spo2 !== undefined && report.min_spo2 !== null) ? report.min_spo2 : 98;
-            const peakG = (report.peak_g_force !== undefined && report.peak_g_force !== null) ? report.peak_g_force : (report.peak_g_load || 1.0);
-            const suitPres = (report.final_suit_pressure_kpa !== undefined) ? report.final_suit_pressure_kpa : 29.6;
-            const suitO2 = (report.final_suit_o2_kpa !== undefined) ? report.final_suit_o2_kpa : 20.8;
-            const survPct = (report.survival_probability_pct !== undefined && report.survival_probability_pct !== null) 
-                ? report.survival_probability_pct 
-                : ((report.survival_probability !== undefined && report.survival_probability !== null) ? report.survival_probability * 100 : 0);
-            const deathCause = report.cause_of_death || report.failure_reason || report.medical_summary || "Noma'lum omil";
+        function initSimulationPlayback(report) {
+            const toolbar = document.getElementById('simPlaybackToolbar');
+            if (toolbar) toolbar.style.display = 'flex';
 
-            document.getElementById('valHR').textContent = Math.round(peakHR);
-            document.getElementById('valSpO2').textContent = minSpO2.toFixed(1);
-            document.getElementById('valG').textContent = (peakG > 100) ? peakG.toFixed(0) : peakG.toFixed(1);
-            document.getElementById('valPres').textContent = suitPres.toFixed(1);
-            document.getElementById('valO2').textContent = suitO2.toFixed(1);
+            const totalDuration = (report.steps && report.steps.length > 0) 
+                ? report.steps[report.steps.length - 1].minute 
+                : 60;
 
-            const hrColor = (peakHR > 175) ? '#ff1744' : ((peakHR > 140) ? '#ffab00' : '#00e676');
-            drawGauge('gaugeHR', peakHR, 40, 220, hrColor, 'BPM');
+            const slider = document.getElementById('simTimelineSlider');
+            if (slider) {
+                slider.min = 0;
+                slider.max = totalDuration;
+                slider.value = 0;
+            }
 
-            const spo2Color = (minSpO2 < 85) ? '#ff1744' : ((minSpO2 < 93) ? '#ffab00' : '#00f0ff');
-            drawGauge('gaugeSpO2', minSpO2, 70, 100, spo2Color, '%');
+            document.getElementById('timelineStartLbl').textContent = 'MET T+00:00';
+            document.getElementById('timelineEndLbl').textContent = `MET T+${pad2(Math.floor(totalDuration))}:00`;
 
-            const gColor = (peakG > 6) ? '#ff1744' : '#ffab00';
-            drawGauge('gaugeG', Math.min(peakG, 10), 0, 10, gColor, 'g');
+            // Render table rows
+            renderSimulationTable(report);
 
-            drawGauge('gaugePres', suitPres, 0, 50, '#00e676', 'kPa');
-            drawGauge('gaugeO2', suitO2, 0, 35, '#00f0ff', 'kPa');
-
+            // Hide previous verdict until playback reaches conclusion
             const vBanner = document.getElementById('verdictBanner');
+            if (vBanner) vBanner.style.display = 'none';
+
+            // Start from minute 0 with auto-play
+            simPlaybackCurrentMinute = 0;
+            simPlaybackIsPlaying = true;
+            updatePlayPauseButtonUI();
+
+            playQuindarTone(true);
+            showToast('ok', 'SIMULYATSIYA BOSHLANDI', 'Raqamli egizak real-vaqt rejimida hisoblanmoqda.');
+        }
+
+        function toggleSimPlayback() {
+            simPlaybackIsPlaying = !simPlaybackIsPlaying;
+            updatePlayPauseButtonUI();
+        }
+
+        function updatePlayPauseButtonUI() {
+            const btn = document.getElementById('btnSimPlayPause');
+            const icon = document.getElementById('playPauseIcon');
+            const txt = document.getElementById('playPauseText');
+            if (!btn) return;
+
+            if (simPlaybackIsPlaying) {
+                btn.className = 'btn-sim-control active-play';
+                icon.textContent = '⏸';
+                txt.textContent = "TO'XTATISH";
+            } else {
+                btn.className = 'btn-sim-control';
+                icon.textContent = '▶';
+                txt.textContent = "O'YNATISH";
+            }
+        }
+
+        function restartSimPlayback() {
+            simPlaybackCurrentMinute = 0;
+            simPlaybackIsPlaying = true;
+            updatePlayPauseButtonUI();
+            const vBanner = document.getElementById('verdictBanner');
+            if (vBanner) vBanner.style.display = 'none';
+            syncSimulationToMinute(0);
+            playQuindarTone(true);
+        }
+
+        function jumpToEndPlayback() {
+            if (!currentSimReport || !currentSimReport.steps) return;
+            const totalDuration = currentSimReport.steps[currentSimReport.steps.length - 1].minute;
+            simPlaybackCurrentMinute = totalDuration;
+            simPlaybackIsPlaying = false;
+            updatePlayPauseButtonUI();
+            syncSimulationToMinute(totalDuration);
+            showVerdictAtEnd();
+        }
+
+        function setSimPlaybackSpeed(spd) {
+            simPlaybackSpeed = spd;
+            [1, 2, 5, 10].forEach(s => {
+                const el = document.getElementById(`btnSpd${s}`);
+                if (el) el.className = `btn-speed ${s === spd ? 'active-speed' : ''}`;
+            });
+        }
+
+        function onTimelineSliderInput(val) {
+            simPlaybackCurrentMinute = parseFloat(val);
+            syncSimulationToMinute(simPlaybackCurrentMinute);
+        }
+
+        function syncSimulationToMinute(targetMinute) {
+            if (!currentSimReport || !currentSimReport.steps) return;
+            const steps = currentSimReport.steps;
+            const totalDuration = steps[steps.length - 1].minute || 60;
+
+            const slider = document.getElementById('simTimelineSlider');
+            if (slider) slider.value = targetMinute;
+
+            const curMins = Math.floor(targetMinute);
+            const curSecs = Math.floor((targetMinute % 1) * 60);
+            document.getElementById('timelineCurLbl').textContent = 
+                `MET T+${pad2(curMins)}:${pad2(curSecs)} / T+${pad2(Math.floor(totalDuration))}:00`;
+
+            // Find closest active step
+            let activeIdx = 0;
+            for (let i = 0; i < steps.length; i++) {
+                if (steps[i].minute <= targetMinute) {
+                    activeIdx = i;
+                } else {
+                    break;
+                }
+            }
+            const s = steps[activeIdx];
+
+            // Update gauges & telemetry values
+            ecgCurrentBpm = s.hr || 75;
+            document.getElementById('valHR').textContent = Math.round(s.hr);
+            document.getElementById('valSpO2').textContent = s.spo2.toFixed(1);
+            document.getElementById('valG').textContent = (s.g_force_effective > 100) ? s.g_force_effective.toFixed(0) : s.g_force_effective.toFixed(1);
+            document.getElementById('valPres').textContent = s.suit_pressure_kpa.toFixed(1);
+            document.getElementById('valO2').textContent = (s.o2_remaining_pct * 0.208).toFixed(1);
+
+            const hrColor = (s.hr > 170) ? '#ff1744' : ((s.hr > 135) ? '#ffab00' : '#00e676');
+            drawGauge('gaugeHR', s.hr, 40, 220, hrColor, 'BPM');
+
+            const spo2Color = (s.spo2 < 85) ? '#ff1744' : ((s.spo2 < 93) ? '#ffab00' : '#00f0ff');
+            drawGauge('gaugeSpO2', s.spo2, 70, 100, spo2Color, '%');
+
+            const gColor = (s.g_force_effective > 6) ? '#ff1744' : '#ffab00';
+            drawGauge('gaugeG', Math.min(s.g_force_effective, 10), 0, 10, gColor, 'g');
+
+            drawGauge('gaugePres', s.suit_pressure_kpa, 0, 50, '#00e676', 'kPa');
+            drawGauge('gaugeO2', s.o2_remaining_pct * 0.208, 0, 35, '#00f0ff', 'kPa');
+
+            // Update HUD text & Hazard status
+            updateHUDAndHazard(s);
+
+            // Update Mission Phase
+            updateMissionPhasePill(targetMinute / Math.max(1, totalDuration));
+
+            // Highlight corresponding row in table & scroll
+            highlightTableRow(activeIdx);
+        }
+
+        function updateHUDAndHazard(step) {
+            const op = (selectedOpId && opsData[selectedOpId]) ? opsData[selectedOpId] : null;
+            if (op) {
+                document.getElementById('hudEnvName').textContent = op.target_body || 'FAZOVIY MONITORING';
+                document.getElementById('hudGravity').textContent = `${(step.g_force_effective > 100) ? step.g_force_effective.toFixed(0) : step.g_force_effective.toFixed(2)} g`;
+                document.getElementById('hudPressure').textContent = `${step.suit_pressure_kpa.toFixed(1)} kPa`;
+                document.getElementById('hudRadiation').textContent = `${step.accumulated_radiation_msv.toFixed(2)} mSv`;
+                document.getElementById('hudTemp').textContent = `${step.core_temp.toFixed(1)} °C`;
+            }
+
+            const hazardBadge = document.getElementById('hudHazardBadge');
+            const eventPill = document.getElementById('hudLiveEventPill');
+
+            if (eventPill) {
+                eventPill.textContent = step.event_log || step.status || "Tizim me'yorda ishlamoqda.";
+            }
+
+            if (hazardBadge) {
+                if (step.status === 'FATAL' || step.status === 'CRITICAL_FAILURE') {
+                    hazardBadge.className = 'canvas-hazard-banner level-5';
+                    hazardBadge.innerHTML = '☠️ XAVF: FOJIAVIY HALOKAT';
+                } else if (step.status === 'CRITICAL' || step.hr > 175) {
+                    hazardBadge.className = 'canvas-hazard-banner level-4';
+                    hazardBadge.innerHTML = '🚨 XAVF: KRITIK YUKLAMA';
+                } else if (step.status === 'ELEVATED' || step.hr > 135) {
+                    hazardBadge.className = 'canvas-hazard-banner level-3';
+                    hazardBadge.innerHTML = '⚠️ XAVF: YUQORI DISKOMFORT';
+                } else {
+                    hazardBadge.className = 'canvas-hazard-banner level-1';
+                    hazardBadge.innerHTML = '✓ XAVF: NOMINAL';
+                }
+            }
+        }
+
+        function updateMissionPhasePill(progressRatio) {
+            const pill = document.getElementById('simPhasePill');
+            if (!pill) return;
+
+            if (progressRatio < 0.20) {
+                pill.textContent = '1-BOSQICH: HAVO QULFI CHIQISH VA DASTLABKI TEKSHIRUV';
+                pill.style.color = 'var(--cyan)';
+            } else if (progressRatio < 0.45) {
+                pill.textContent = '2-BOSQICH: OPERATSIYA MAYDONIGA YAQINLASHISH VA XAVFSIZLIK';
+                pill.style.color = '#38bdf8';
+            } else if (progressRatio < 0.75) {
+                pill.textContent = '3-BOSQICH: ASOSIY VAZIFANI BAJARISH (METABOLIK PIK YUKLAMA)';
+                pill.style.color = 'var(--amber)';
+            } else if (progressRatio < 0.90) {
+                pill.textContent = '4-BOSQICH: TELEMETRIYA TAHLILI VA NAMUNALARNI SAQLASH';
+                pill.style.color = '#a78bfa';
+            } else {
+                pill.textContent = '5-BOSQICH: OPERATSIYANI YAKUNLASH VA GERMETIZATSIYA';
+                pill.style.color = 'var(--green)';
+            }
+        }
+
+        function renderSimulationTable(report) {
+            const tbody = document.getElementById('simTableBody');
+            tbody.innerHTML = '';
+            document.getElementById('simStepsCount').textContent = `${report.steps.length} ta bosqich qayd etildi`;
+
+            report.steps.forEach((s, idx) => {
+                const tr = document.createElement('tr');
+                tr.id = `simRow_${idx}`;
+                tr.className = 'clickable-step-row';
+                tr.onclick = () => {
+                    simPlaybackCurrentMinute = s.minute;
+                    syncSimulationToMinute(s.minute);
+                };
+
+                const isFatal = (s.status === 'FATAL' || s.status === 'CRITICAL_FAILURE');
+                const isWarn = (s.status === 'CRITICAL' || s.status === 'ELEVATED');
+                const statusCls = isFatal ? 'td-fatal' : (isWarn ? 'td-warn' : 'td-nominal');
+
+                tr.innerHTML = `
+                    <td>T+${s.minute.toFixed(1)}m</td>
+                    <td class="${statusCls}">${s.hr.toFixed(1)}</td>
+                    <td class="${statusCls}">${s.spo2.toFixed(1)}%</td>
+                    <td>${s.suit_pressure_kpa.toFixed(1)} kPa</td>
+                    <td>${(s.g_force_effective > 100) ? s.g_force_effective.toFixed(0) : s.g_force_effective.toFixed(2)}g</td>
+                    <td>${s.accumulated_radiation_msv.toFixed(2)}</td>
+                    <td>${s.core_temp.toFixed(1)}°C</td>
+                    <td>${s.stress_index.toFixed(0)}</td>
+                    <td class="${statusCls}">${escapeHtml(s.event_log || s.status)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function highlightTableRow(idx) {
+            const allRows = document.querySelectorAll('#simTableBody tr');
+            allRows.forEach(r => r.classList.remove('active-playback-row'));
+
+            const targetRow = document.getElementById(`simRow_${idx}`);
+            if (targetRow) {
+                targetRow.classList.add('active-playback-row');
+                targetRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function showVerdictAtEnd() {
+            if (!currentSimReport) return;
+            const report = currentSimReport;
+            const vBanner = document.getElementById('verdictBanner');
+            if (!vBanner) return;
+            vBanner.style.display = 'block';
             vBanner.className = `verdict-banner-wrap verdict-${report.verdict}`;
 
             const badgeText = document.getElementById('verdictBadgeText');
@@ -3711,60 +5262,66 @@ HTML_CONTENT = """<!DOCTYPE html>
             const descText = document.getElementById('verdictDescription');
             const causeBox = document.getElementById('verdictCauseBox');
 
+            const survPct = report.survival_probability_pct || 0;
+            const deathCause = report.cause_of_death || "Spaghettification Gravitatsion To'lqin Gradienti va Ekstremal Relyativistik Radiatsiya";
+
             if (report.verdict === 'GO') {
                 badgeText.innerHTML = `✅ MISSISYA NATIJASI: GO (RUXSAT BERILDI)`;
                 survText.innerHTML = `OMON QOLISH EHTIMOLI: ${survPct.toFixed(1)}%`;
-                descText.textContent = `Astronavt ushbu kosmik operatsiyani fiziologik xavfsiz bajara oladi. Raqamli egizak barqaror natija ko'rsatdi.`;
+                descText.textContent = `Astronavt ushbu kosmik operatsiyani fiziologik xavfsiz bajara oladi. Raqamli egizak barqaror kardiometabolik natija ko'rsatdi.`;
                 causeBox.style.display = 'none';
-                showToast('ok', 'SIMULYATSIYA MUVAFFAQIYATLI', `Missiya holati: GO (Omon qolish: ${survPct.toFixed(1)}%)`);
             } else if (report.verdict === 'CAUTION_GO') {
                 badgeText.innerHTML = `⚠️ MISSISYA NATIJASI: CAUTION_GO (EHTIYOTKORLIK TALAB ETILADI)`;
                 survText.innerHTML = `OMON QOLISH EHTIMOLI: ${survPct.toFixed(1)}%`;
-                descText.textContent = `Yuqori charchoq, sovuq yoki gipoksiya ehtimoli aniqlandi. Qo'shimcha kislorod va zaxira kardiostimulyatsiya tavsiya etiladi.`;
+                descText.textContent = `Yuqori charchoq, sovuq yoki gipoksiya ehtimoli aniqlandi. Zaxira kardiostimulyatsiya va doimiy monitoring tavsiya etiladi.`;
                 causeBox.style.display = 'none';
-                showToast('warn', 'EHTIYOTKORLIK: CAUTION_GO', `Omon qolish: ${survPct.toFixed(1)}% - Qo'shimcha ehtiyot choralari zarur`);
             } else {
                 badgeText.innerHTML = `☠️ CRITICAL: FATAL_FAILURE (HALOKATLI XATOLIK - TAQIQLANADI)`;
                 survText.innerHTML = `OMON QOLISH EHTIMOLI: 0.0%`;
                 descText.textContent = `DIQQAT! Ushbu missiya inson biologiyasi va skafandr chidamlilik chegarasidan mutlaqo tashqarida. Simulyatsiya jarayonida astronavt halok bo'ldi!`;
                 causeBox.style.display = 'block';
                 causeBox.textContent = `HALOKAT SABABI: ${deathCause} (Vaqt: T+${(report.time_of_failure_min || 2.0).toFixed(1)}m)`;
-                showToast('critical', 'HALOKAT: FATAL_FAILURE', `Halokat sababi: ${deathCause}`);
             }
-
-            const tbody = document.getElementById('simTableBody');
-            tbody.innerHTML = '';
-            document.getElementById('simStepsCount').textContent = `${report.steps.length} ta minut qayd etildi`;
-
-            report.steps.forEach(s => {
-                const tr = document.createElement('tr');
-                const isFatal = (s.status === 'FATAL');
-                const isWarn = (s.status === 'WARNING');
-                const statusCls = isFatal ? 'td-fatal' : (isWarn ? 'td-warn' : 'td-nominal');
-
-                const stepHr = (s.hr !== undefined) ? s.hr : (s.heart_rate || 75);
-                const stepSpo2 = (s.spo2 !== undefined) ? s.spo2 : 98;
-                const stepG = (s.g_force_effective !== undefined) ? s.g_force_effective : (s.g_load || 1.0);
-                const stepRad = (s.accumulated_radiation_msv !== undefined) ? s.accumulated_radiation_msv : (s.accumulated_radiation_mSv || 0);
-                const stepPres = (s.suit_pressure_kpa !== undefined) ? s.suit_pressure_kpa : 29.6;
-                const stepTemp = (s.core_temp !== undefined) ? s.core_temp : 37.0;
-                const stepStress = (s.stress_index !== undefined) ? s.stress_index : 100;
-
-                tr.innerHTML = `
-                    <td>T+${s.minute.toFixed(1)}m</td>
-                    <td class="${statusCls}">${stepHr.toFixed(1)}</td>
-                    <td class="${statusCls}">${stepSpo2.toFixed(1)}%</td>
-                    <td>${stepPres.toFixed(1)} kPa</td>
-                    <td>${(stepG > 100) ? stepG.toFixed(0) : stepG.toFixed(2)}g</td>
-                    <td>${stepRad.toFixed(2)}</td>
-                    <td>${stepTemp.toFixed(1)}°C</td>
-                    <td>${stepStress.toFixed(0)}</td>
-                    <td class="${statusCls}">${s.event_log || s.status}</td>
-                `;
-                tbody.appendChild(tr);
-            });
         }
 
+        // Circular Canvas Gauges
+        function drawGauge(canvasId, value, min, max, color, unit) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const r = 38;
+
+            ctx.clearRect(0, 0, w, h);
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI * 0.75, Math.PI * 2.25);
+            ctx.strokeStyle = '#101827';
+            ctx.lineWidth = 7;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            const frac = Math.max(0, Math.min(1, (value - min) / (max - min)));
+            const endAngle = Math.PI * 0.75 + frac * (Math.PI * 1.5);
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI * 0.75, endAngle);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 7;
+            ctx.lineCap = 'round';
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 8;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+
+        function pad2(num) {
+            return String(num).padStart(2, '0');
+        }
+    
         // ==========================================
         // LIVE TELEMETRY & SSE STREAM LOGIC
         // ==========================================
