@@ -28,8 +28,17 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 SECRETS_DIR = PROJECT_ROOT / ".secrets"
 
-DATA_DIR.mkdir(mode=0o700, exist_ok=True)
-SECRETS_DIR.mkdir(mode=0o700, exist_ok=True)
+try:
+    DATA_DIR.mkdir(mode=0o700, exist_ok=True)
+except OSError:
+    DATA_DIR = Path("/tmp/data")
+    DATA_DIR.mkdir(mode=0o700, exist_ok=True)
+
+try:
+    SECRETS_DIR.mkdir(mode=0o700, exist_ok=True)
+except OSError:
+    SECRETS_DIR = Path("/tmp/.secrets")
+    SECRETS_DIR.mkdir(mode=0o700, exist_ok=True)
 
 class SecurityConfig:
     """Manages cryptographic keys securely without hardcoding."""

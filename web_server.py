@@ -14,7 +14,7 @@ import queue
 from typing import Dict, Any, List, Generator
 from flask import Flask, jsonify, request, render_template_string, Response, stream_with_context, send_file
 
-from health_monitor.config import SecurityConfig, MissionParams
+from health_monitor.config import SecurityConfig, MissionParams, PROJECT_ROOT
 from health_monitor.edge_daemon import AutonomousSuitEdgeDaemon
 from health_monitor.simulator import SpaceflightScenarioSimulator
 from health_monitor.seu_protection import TelemetryFrameIntegrity, RadiationFaultInjector
@@ -52,57 +52,65 @@ scenario_state = {
     "recent_frames": []
 }
 
+def generate_simulation_step() -> Dict[str, Any]:
+    """Generates a single simulation telemetry step and processes it through the edge daemon."""
+    t_step = scenario_state.get("t_step", 0.0)
+    mode = scenario_state["mode"]
+    astro_id = "ASTRO-01-CDR"
+
+    if mode == "NOMINAL":
+        frame = SpaceflightScenarioSimulator.generate_nominal_frame(astro_id, t_step)
+    elif mode == "DRILLING":
+        frame = SpaceflightScenarioSimulator.generate_eva_tool_drilling_frame(astro_id, t_step)
+    elif mode == "HYPOXIA":
+        frame = SpaceflightScenarioSimulator.generate_acute_hypoxia_decompression_frame(astro_id)
+    elif mode == "PANIC":
+        frame = SpaceflightScenarioSimulator.generate_acute_panic_frame(astro_id)
+    else:
+        frame = SpaceflightScenarioSimulator.generate_nominal_frame(astro_id, t_step)
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        result = loop.run_until_complete(daemon.process_single_frame(frame))
+    finally:
+        loop.close()
+
+    scenario_state["recent_frames"].append(result)
+    if len(scenario_state["recent_frames"]) > 60:
+        del scenario_state["recent_frames"][0]
+
+    if mode == "MULTI_CREW":
+        raw_crew = SpaceflightScenarioSimulator.generate_multi_crew_crisis()
+        ranked = triage_engine.triage_crew(raw_crew)
+        alloc = triage_engine.allocate_automated_countermeasures(ranked)
+        scenario_state["multi_crew_data"] = [
+            {**r, "allocated_actions": a["allocated_actions"]}
+            for r, a in zip(ranked, alloc)
+        ]
+    else:
+        crew_snapshots = [
+            {"astronaut_id": "ASTRO-01-CDR", "filtered_hr": result["filtered_hr"], "filtered_spo2": result["filtered_spo2"], "suit_pressure_kpa": result["suit_pressure_kpa"], "stress_index": result["stress_index"]},
+            {"astronaut_id": "ASTRO-02-PLT", "filtered_hr": 74.0, "filtered_spo2": 98.4, "suit_pressure_kpa": 29.6, "stress_index": 120.0},
+            {"astronaut_id": "ASTRO-03-MS1", "filtered_hr": 78.5, "filtered_spo2": 97.9, "suit_pressure_kpa": 29.5, "stress_index": 150.0},
+            {"astronaut_id": "ASTRO-04-MS2", "filtered_hr": 71.0, "filtered_spo2": 98.8, "suit_pressure_kpa": 29.6, "stress_index": 95.0}
+        ]
+        ranked = triage_engine.triage_crew(crew_snapshots)
+        alloc = triage_engine.allocate_automated_countermeasures(ranked)
+        scenario_state["multi_crew_data"] = [
+            {**r, "allocated_actions": a["allocated_actions"]}
+            for r, a in zip(ranked, alloc)
+        ]
+
+    scenario_state["t_step"] = t_step + 0.5
+    return result
+
+
 def simulation_background_loop():
     """Continuous real-time sensor generation and edge evaluation."""
-    t_step = 0.0
     while True:
         try:
-            mode = scenario_state["mode"]
-            astro_id = "ASTRO-01-CDR"
-
-            if mode == "NOMINAL":
-                frame = SpaceflightScenarioSimulator.generate_nominal_frame(astro_id, t_step)
-            elif mode == "DRILLING":
-                frame = SpaceflightScenarioSimulator.generate_eva_tool_drilling_frame(astro_id, t_step)
-            elif mode == "HYPOXIA":
-                frame = SpaceflightScenarioSimulator.generate_acute_hypoxia_decompression_frame(astro_id)
-            elif mode == "PANIC":
-                frame = SpaceflightScenarioSimulator.generate_acute_panic_frame(astro_id)
-            else:
-                frame = SpaceflightScenarioSimulator.generate_nominal_frame(astro_id, t_step)
-
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            try:
-                result = loop.run_until_complete(daemon.process_single_frame(frame))
-            finally:
-                loop.close()
-
-            scenario_state["recent_frames"].append(result)
-            if len(scenario_state["recent_frames"]) > 60:
-                del scenario_state["recent_frames"][0]
-
-            if mode == "MULTI_CREW":
-                raw_crew = SpaceflightScenarioSimulator.generate_multi_crew_crisis()
-                ranked = triage_engine.triage_crew(raw_crew)
-                alloc = triage_engine.allocate_automated_countermeasures(ranked)
-                scenario_state["multi_crew_data"] = [
-                    {**r, "allocated_actions": a["allocated_actions"]}
-                    for r, a in zip(ranked, alloc)
-                ]
-            else:
-                crew_snapshots = [
-                    {"astronaut_id": "ASTRO-01-CDR", "filtered_hr": result["filtered_hr"], "filtered_spo2": result["filtered_spo2"], "suit_pressure_kpa": result["suit_pressure_kpa"], "stress_index": result["stress_index"]},
-                    {"astronaut_id": "ASTRO-02-PLT", "filtered_hr": 74.0, "filtered_spo2": 98.4, "suit_pressure_kpa": 29.6, "stress_index": 120.0},
-                    {"astronaut_id": "ASTRO-03-MS1", "filtered_hr": 78.5, "filtered_spo2": 97.9, "suit_pressure_kpa": 29.5, "stress_index": 150.0},
-                    {"astronaut_id": "ASTRO-04-MS2", "filtered_hr": 71.0, "filtered_spo2": 98.8, "suit_pressure_kpa": 29.6, "stress_index": 95.0}
-                ]
-                ranked = triage_engine.triage_crew(crew_snapshots)
-                alloc = triage_engine.allocate_automated_countermeasures(ranked)
-                scenario_state["multi_crew_data"] = [
-                    {**r, "allocated_actions": a["allocated_actions"]}
-                    for r, a in zip(ranked, alloc)
-                ]
+            result = generate_simulation_step()
 
             # SSE broadcast – push latest telemetry and triage to all listeners
             _publish_sse({
@@ -112,7 +120,6 @@ def simulation_background_loop():
                 "ts": time.time()
             })
 
-            t_step += 0.5
             time.sleep(0.5)
         except Exception as exc:
             time.sleep(1.0)
@@ -185,7 +192,7 @@ def sse_stream():
 @app.route("/api/telemetry", methods=["GET"])
 def get_telemetry():
     if not scenario_state["recent_frames"]:
-        return jsonify({"status": "WAITING"})
+        generate_simulation_step()
     latest = scenario_state["recent_frames"][-1]
     return jsonify({
         "latest": latest,
@@ -333,7 +340,7 @@ def landing():
 @app.route("/AstroVitals.zip", methods=["GET"])
 @app.route("/download/zip", methods=["GET"])
 def download_project_zip():
-    zip_path = os.path.join(PROJECT_ROOT, "AstroVitals.zip")
+    zip_path = os.path.join(str(PROJECT_ROOT), "AstroVitals.zip")
     if os.path.exists(zip_path):
         return send_file(zip_path, as_attachment=True, download_name="AstroVitals.zip")
     return jsonify({"error": "Zip archive not found"}), 404
