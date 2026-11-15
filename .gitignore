@@ -1,0 +1,32 @@
+# Build artifacts
+build/
+CMakeFiles/
+CMakeCache.txt
+*.so
+*.a
+*.o
+dsp_benchmark
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Sensitive data and keys (User Security Rule 4)
+.secrets/
+*.key
+*.pem
+*.cert
+
+# Database and runtime telemetry storage
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
