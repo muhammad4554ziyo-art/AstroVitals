@@ -12,7 +12,7 @@ import asyncio
 import threading
 import queue
 from typing import Dict, Any, List, Generator
-from flask import Flask, jsonify, request, render_template_string, Response, stream_with_context
+from flask import Flask, jsonify, request, render_template_string, Response, stream_with_context, send_file
 
 from health_monitor.config import SecurityConfig, MissionParams
 from health_monitor.edge_daemon import AutonomousSuitEdgeDaemon
@@ -329,6 +329,14 @@ def index():
 @app.route("/welcome", methods=["GET"])
 def landing():
     return render_template_string(get_landing_template())
+
+@app.route("/AstroVitals.zip", methods=["GET"])
+@app.route("/download/zip", methods=["GET"])
+def download_project_zip():
+    zip_path = os.path.join(PROJECT_ROOT, "AstroVitals.zip")
+    if os.path.exists(zip_path):
+        return send_file(zip_path, as_attachment=True, download_name="AstroVitals.zip")
+    return jsonify({"error": "Zip archive not found"}), 404
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 8085))

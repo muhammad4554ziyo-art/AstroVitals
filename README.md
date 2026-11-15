@@ -9,6 +9,14 @@ Designed for deep-space manned missions (Lunar South Pole / Mars Transit) operat
 
 ---
 
+## 🎥 Official Demo Video & Project Archive
+> **"Predict the Risk. Protect the Crew."**
+>
+> * 📹 **Full Demo Video (MP4):** [assets/video/AstroVitals_Demo.mp4](assets/video/AstroVitals_Demo.mp4)
+> * 📦 **Complete Project Archive (ZIP):** [AstroVitals.zip](AstroVitals.zip) *(Includes full source code, C++ DSP core, Digital Twin models, simulation engine, and presentation video)*
+
+---
+
 ## Architecture Overview
 
 ```mermaid
